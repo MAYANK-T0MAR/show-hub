@@ -1,0 +1,304 @@
+.all-episode{
+    margin-top: -8vh;
+}
+
+.all-episode-banner{
+    min-width: 100vw;
+    height: 350px;
+    background-size: cover;
+    background-position: 50% 35%;
+    background-repeat: no-repeat;
+    display: flex;
+    
+}
+
+.content-wrapper{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    padding: 20px;
+    justify-content: center;
+    /* background: rgba(255, 255, 255, 0.2); */
+    background: rgb(6 6 6 / 20%);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.all-episode-intro{
+    width: 76vw;
+    display: flex;
+    align-self: flex-end;
+    gap: 15px;
+}
+
+.all-episode-poster{
+    /* width: 204px;
+    height: 300px; */
+    min-width: 108px;
+    min-height: 158px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.all-episode-details{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    color: white;
+    padding-bottom: 6px;
+}
+
+#all-episode-intro-title{
+    font-size: 1.5rem;
+    line-height: 0.8;
+    margin-bottom: 5px;
+    color: #ffffffb3;
+    font-weight: 700;
+}
+#all-episode-static-title{
+    font-size: 2rem;
+    font-weight: 600;
+    line-height: 0.8;
+    /* margin-top: -11px; */
+}
+
+.all-episode-content{
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.all-episode-content-top-rated-content{
+    width: 76vw;
+    display: flex;
+    gap: 30px;
+    padding: 15px 5px;
+    overflow-x: auto;
+}
+
+.all-episode-content-top-rated-card{
+    width: 394px;
+    height: 202px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    border-radius: 7px;
+    box-shadow: 0 3px 1px -2px rgba(0,0,0,.2),0 2px 2px 0 rgba(0,0,0,.14),0 1px 5px 0 rgba(0,0,0,.12);
+    cursor: pointer;
+    transition: transform 0.1s ease-in-out;
+}
+
+.all-episode-content-top-rated-card:active {
+    transform: scale(0.95);
+  }
+  
+
+.top-rated-eps-airdate{
+    color: gray;
+}
+
+.top-rated-eps-number{
+    font-weight: 700;
+}
+
+.top-rated-eps-summary-text {
+    color: gray;               
+    overflow: hidden;            
+    text-overflow: ellipsis;     
+    display: -webkit-box;      
+    line-clamp: 3;  
+    -webkit-line-clamp: 3;       
+    -webkit-box-orient: vertical;
+
+}
+.highlight {
+    background-color: #3578ff17; /* or any color you prefer */
+}
+
+.polygon-shape-title{
+    width: 137px;
+    height: 22px;
+    display: inline-block;
+    background-color: #3577ff;
+    color: white;
+    padding-left: 8px;
+    font-weight: 500;
+    font-size: 14px;
+    text-transform: uppercase;
+    border-radius: 5px;
+    position: relative;
+    letter-spacing: 1px;
+    clip-path: polygon(0 0, 100% 0%, 94% 100%, 0 100%);
+}
+
+
+.all-episode-content-header{
+    width: 76vw;
+    margin-bottom: 10px;
+}
+.all-episode-content-header-title{
+    /* font-size: 2rem; */
+    font-size: 1.5rem;
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+
+.all-episode-content-header-seasons{
+    display: flex;
+    gap: 20px;
+    padding-bottom: 15px;
+    margin-bottom: 5px;
+    overflow-x: auto;
+}
+
+.aech-season-child{
+    min-height: 50px;
+    min-width: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.aech-season-child:hover{
+    background-color: #A1BFFF;
+}
+
+.aech-season-child--active{
+    background-color: #3577ff;
+    color: white;
+}
+
+.aech-season-child--active:hover{
+    background-color: transparent;
+    color: black;
+    border: 1px solid;
+}
+
+.all-episode-content-episodes{
+    width: 76vw;
+    /* display: flex; */
+    flex-direction: column;
+    gap: 30px;
+    opacity: 0;
+    display: none;
+    transition: opacity 0.2s ease-in;
+    
+}
+.all-episode-content-episodes.fade-in {
+    opacity: 1;
+    display: flex;
+}
+
+
+
+
+.all-episode-content-episode-card{
+    display: flex;
+    width: 100%;
+    gap: 10px;
+    animation: fadeIn 1s ease-in-out;
+    transition: background-color 0.5s ease;
+}
+
+.all-episode-content-episodes .all-episode-content-episode-card:not(:first-child){
+    border-top: 1px solid rgba(0, 0, 0, 0.12);
+    padding-top: 10px;
+}
+
+
+
+.all-episode-content-episode-image{
+    min-width: 235px;
+    height: 132px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: gray;
+}
+.all-episode-content-episode-data{
+    width: 100%;
+}
+.aec-episode-name{
+    display: flex;
+    justify-content: space-between;
+    font-weight: 700;
+}
+
+.airdate{
+    font-weight: 400;
+    color: gray;
+}
+
+
+@media (max-width: 1040px){
+    .all-episode{
+        margin-top: 0;
+    }
+}
+
+
+@media (max-width: 768px){
+    .aech-season-child--active:hover{
+        background-color: #3577ff;
+        border: none;
+        color: white;
+    }
+    .all-episode-content-top-rated-content{
+        gap: 20px;
+    }
+    .all-episode-content-top-rated-card{
+        min-width: 257px;
+    }
+}
+
+@media (max-width: 600px){
+    .all-episode-content{
+        align-items: unset;
+    }
+    .all-episode-content-top-rated-content, .all-episode-content-header, 
+    .all-episode-content-episodes, .all-episode-intro{
+        /* width: 93vw; */
+        width: calc(100vw - 40px);
+    }
+    .all-episode-content-episode-card{
+        flex-direction: column;
+    }
+    .all-episode-content-episode-image{
+        /* height: 257px; */
+        /* height: 30vh; */
+        height: 43vw;
+    }
+    .aec-episode-name{
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 425px) {
+    #all-episode-intro-title{
+        font-size: 1rem;
+    }
+    #all-episode-static-title{
+        font-size: 1.5rem;
+    }
+    .all-episode-content-header-title{
+        font-size: 1.3rem;
+    }
+    .all-episode-poster{
+        /* width: 204px;
+        height: 300px; */
+        min-width: 78px;
+        /* min-height: 128px; */
+        min-height: 107px;
+    }
+    .all-episode-banner{
+        height: 240px;    
+    }
+}

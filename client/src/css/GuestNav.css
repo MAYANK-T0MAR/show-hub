@@ -1,0 +1,47 @@
+.guest-nav {
+    display: flex;
+    align-items: center;
+    /* width: 45vw; */
+    width: 864px;
+}
+
+.links {
+    display: flex;
+    justify-content: center;
+    /* width: 40vw; */
+    width: 677px;
+    gap: 20px;
+}
+
+.link {
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.link:hover {
+    color: #d4d6f4;
+}
+
+.signup {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+#signup-button {
+    width: 79px;
+    height: 38px;
+    border: none;
+    font-size: 15px;
+    color: #fff;
+    border-radius: 7px;
+    font-weight: 500;
+    transition: 0.5s;
+    transition-property: box-shadow;
+    background: #3577ff;
+}
+
+#signup-button:hover {
+    box-shadow: 0 0 25px #3577ff;
+    scale: 1.03;
+}

@@ -1,0 +1,143 @@
+.cast{
+    width: calc(279px + 58vw);
+    margin: 10px 0px;
+}
+
+.cast-header{
+    display: flex;
+    gap: 5px;
+    margin-left: 13px;
+}
+
+#cast-h3{
+    margin-top: 5px;
+}
+
+
+#cast-h3::before{
+    background: #3577ff;
+    border-radius: 4px;
+    content: "";
+    margin-left: -.75rem;
+    align-self: flex-start;
+    position: absolute;
+    height: 40px;
+    width: 4px;
+}
+
+#cast-go-to-icon{
+    margin-top: 5px;
+}
+
+
+.cast-list{
+    width: 100%;
+    max-height: 90vh;
+    overflow: hidden;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.cast-list--expanded{
+    max-height: max-content;
+}
+
+.cast-item{
+    width: 48.5%;
+    margin-top: 30px;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.person-pic{
+    /* width: 96px;
+    height: 96px; */
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.person-data{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+#person-name{
+    color: #5C728A;
+    font-weight: 600;
+}
+#character-name{
+    font-size: 0.8rem;
+    color: #5C728A;
+}
+
+.show-more{
+    width: calc(279px + 58vw);
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    cursor: pointer;
+}
+
+@media (max-width: 1024px){
+    .cast-list{
+        overflow: auto;
+        flex-wrap: nowrap;
+        height: max-content;
+        padding-bottom: 20px;
+    }
+    .cast-item{
+        flex-direction: column;
+        align-items: center;
+    }
+    .person-pic{
+        width: 22vw;
+        height: 22vw;
+    }
+    .person-data{
+        text-align: center;
+    }
+    .show-more{
+        display: none;
+    }
+}
+
+@media (max-width: 600px){
+    .person-pic{
+        width: 46vw;
+        height: 46vw;
+    }
+    #person-name{
+        font-size: 1.3rem;
+    }
+    #character-name{
+        font-size: 1.1rem;
+    }
+}
+
+@media (max-width: 425px){
+    .cast{
+        width: 90vw;
+    }
+    #cast-h3::before{
+        height: 30px;
+    }
+    #cast-go-to-icon{
+        margin-top: 7px;
+    }
+    .person-pic{
+        width: 38vw;
+        height: 38vw;
+    }
+    #person-name{
+        font-size: 1rem;
+    }
+    #character-name{
+        font-size: 0.8rem;
+    }
+}

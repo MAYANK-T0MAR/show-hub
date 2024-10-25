@@ -1,0 +1,27 @@
+.entry{
+    min-width: max-content;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.data-title{
+    color: white;
+    font-weight: 400;
+}
+
+.entry-data{
+    color: white;
+    font-weight: 100;
+}
+
+@media (max-width: 430px){
+    .data-title{
+        color: #9299A1;
+        font-weight: 400;
+    }
+    .entry-data{
+        color: #5C728A;
+        font-weight: 400;
+    }
+}

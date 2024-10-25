@@ -1,0 +1,17 @@
+.global-alert{
+    width: max-content;
+    z-index: 1012;
+    position: fixed;
+    top: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    padding: 17px 12px;
+}
+
+.alert-dismissible .btn-close{
+    position: unset;
+    padding: unset;
+    margin-left: 10px;
+}

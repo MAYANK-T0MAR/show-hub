@@ -1,0 +1,141 @@
+.user-banner{
+    min-width: 100vw;
+    height: 350px;
+    background-size: cover;
+    background-position: 50% 35%;
+    background-repeat: no-repeat;
+    display: flex;
+}
+
+.user-content-wrapper{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    padding-inline: 20px;
+    justify-content: center;
+    background: rgb(6 6 6 / 20%);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    background: linear-gradient(180deg,rgba(6, 13, 34 ,0) 40%,rgba(6, 13, 34, .6));
+}
+
+.user-intro{
+    width: 76vw;
+    display: flex;
+    align-self: flex-end;
+    gap: 15px;
+}
+
+.user-poster{
+    max-height: 230px;
+    max-width: 160px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.user-details{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    color: white;
+    padding-bottom: 6px;
+}
+
+#user-intro-title{
+    padding: 14px 0px;
+    font-size: 1.9rem;
+    line-height: 0.8;
+    margin-bottom: 5px;
+    color: #ffffffb3;
+    font-weight: 500;
+}
+
+
+.user-profile-menu{
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+    background-color: white;
+}
+
+.user-profile-menu a{
+    text-wrap: nowrap;
+    color: #7a858f;
+    font-weight: 500;
+    padding: 18px 0;
+}
+
+.user-profile-menu a:hover{
+    color: rgb(65, 132, 255);
+}
+
+.highlightCurrentPage{
+    color: rgb(65, 132, 255) !important;
+}
+
+@media (max-width: 1040px){
+    .user-intro{
+        width: 100%;
+    }
+    .user-content-wrapper{
+        padding-inline: 50px;
+    }
+}
+
+@media (max-width : 760px){
+    .user-poster{
+        max-width: 120px;
+        max-height: 160px;
+    }
+    .user-content-wrapper{
+        padding-inline: 30px;
+    }
+    #user-intro-title{
+        font-size: 1.7rem;
+    }
+    .user-banner{
+        height: 240px;    
+    }
+
+}
+
+
+@media (max-width : 889px){
+    .user-profile-menu{
+        overflow-x: auto;
+    }
+
+    #Overview-link{
+        margin-left: 46vw;
+    }
+}
+
+@media (max-width: 600px){
+
+    #Overview-link{
+        margin-left: 0;
+    }
+
+    .user-poster{
+        aspect-ratio: auto;
+        max-width: 95px;
+        height: auto;
+    }
+
+    #user-intro-title{
+        font-size: 1.4rem;
+    }
+    .user-profile-menu{
+        justify-content: flex-start;
+        overflow-x: auto;
+        padding: 0px 25px;
+        gap: 43px;
+    }
+}
+
+@media (max-width: 425px) {
+    .user-banner{
+        height: 240px;    
+    }
+}

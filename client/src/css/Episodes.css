@@ -1,0 +1,121 @@
+.episodes{
+    width: max-content;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    padding: 24px 65px;
+}
+
+.episode-header{
+    display: flex;
+    gap: 5px;
+    margin-left: 13px;
+}
+
+.episode-header:hover > :nth-child(3) {
+    color: #3577ff;
+}
+
+#episode-h3{
+    margin-top: 5px;
+}
+
+
+#episode-h3::before{
+    background: #3577ff;
+    border-radius: 4px;
+    content: "";
+    margin-left: -.75rem;
+    align-self: flex-start;
+    position: absolute;
+    height: 40px;
+    width: 4px;
+}
+
+#epi-num{
+    margin-top: 12px;
+}
+
+#go-to-icon{
+    margin-top: 5px;
+}
+
+.episode-list{
+    /* width: 75vw; */
+    width: calc(279px + 58vw);
+    display: flex;
+    gap: 10px;
+    overflow: auto;
+}
+
+.episode-card{
+    min-width: 394px;
+    height: 202px;
+    padding-inline: 10px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    position: relative;
+}
+.episode-number{
+    width: 100%;
+    height: max-content;
+    color: white;
+    position: relative;
+    /* text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); */
+}
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(180deg, rgba(6, 13, 34, 0) 40%, rgba(6, 13, 34, .6)); /* or rgba(255, 255, 255, 0.3) for a light overlay */
+  }
+
+.episode-list::-webkit-scrollbar-button {
+    display: none;
+}
+
+/* Customize the scrollbar track to be transparent */
+.episode-list::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+/* Customize the scrollbar thumb to be very narrow */
+.episode-list::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.2); /* Adjust the thumb color as needed */
+    border-radius: 10px; /* Add rounding for a better look */
+    width: 4px; /* Set the thumb width as low as possible */
+}
+
+/* Customize the scrollbar width */
+.episode-list::-webkit-scrollbar {
+    width: 4px; /* Set the scrollbar width as low as possible */
+    height: 4px; /* Set the horizontal scrollbar height as low as possible, if needed */
+}
+
+@media (max-width: 425px){
+    .episode-list{
+        width: 90vw;
+    }
+    #episode-h3::before{
+        height: 30px;
+    }
+    #epi-num{
+        margin-top: 9px;
+    }
+    #go-to-icon{
+        margin-top: 7px;
+    }
+    .episode-card{
+        min-width: 265px;
+        height: 160px;
+    }
+    .episodes{
+        padding: 24px 0px;
+    }
+}

@@ -1,0 +1,11 @@
+.user-profile{
+    margin-top: -8vh;
+}
+
+
+@media (max-width: 1040px){
+    .user-profile{
+        margin-top: 0;
+    }
+}
+

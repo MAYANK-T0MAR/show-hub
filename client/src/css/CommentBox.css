@@ -1,0 +1,105 @@
+.comment-box{
+    background-color: white;
+    padding: 15px;
+    border-radius: 4px;
+    border: 1px solid #cccccc66;
+    margin-bottom: 15px;
+    /* --------------- */
+}
+
+.odd-child{
+    background-color: #edf1f5;
+}
+
+.even-child{
+    background-color: white;
+}
+
+
+
+.cb-header{
+    display: flex;
+    gap: 20px;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.cb-user{
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.cb-user-pfp{
+    width: 35px;
+    height: 35px;
+    border-radius: 4px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.cb-username{
+    color: #3db4f2;
+    cursor: pointer;
+}
+
+.cb-user-timestamp{
+    color: #9299a1;
+    font-size: 0.9rem;
+    margin-left: 5px;
+}
+
+.cb-actions{
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.cb-like{
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    color: #9299a1;
+    cursor: pointer;
+    text-wrap: nowrap;
+}
+
+.cb-reply-icon{
+    font-size: 1.5rem;
+    color: #3db4f2;
+    display: flex;
+    cursor: pointer;
+}
+
+
+.cb-description{
+    margin-top: 10px;
+}
+
+.cb-description img{
+    width: 100%;
+    height: 100%;
+}
+
+.cb-description a{
+    color: #3db4f2;
+}
+
+.cb-replies{
+    margin-top: 10px;
+    /* margin-left: 26px; */
+    position: relative;
+
+    padding-left: 10px;
+}
+
+
+@media (max-width: 425px){
+    .cb-actions{
+        gap: 10px;
+    }
+}
+

@@ -1,0 +1,121 @@
+.navbar {
+    height: 8vh;
+    width: 100vw;
+    background-color: #2b2d42;
+    color: #bcbedc;
+    display: flex;
+    justify-content: center;
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    transition: transform 0.3s ease-in-out;
+}
+
+.navbar a{
+    color: #bcbedc;
+}
+
+.navbar a:hover{
+    color: #d4d6f4;
+}
+.navbar--hidden {
+    transform: translateY(-100%);
+}
+
+.navbar--visible {
+    transform: translateY(0);
+}
+
+.onPageNavbar{
+    background-color: rgba(43, 45, 66, 0.5);
+    transition: all 0.3s ease-in-out;
+}
+.onPageNavbar:hover{
+    background-color: rgba(43, 45, 66, 1);
+}
+
+
+.mobile-nav{
+    display: none;
+    align-items: center;
+    justify-content: center;
+    min-width: 50px;
+    min-height: 50px;
+    position: fixed;
+    right: 20px;
+    bottom: 25px;
+    background: white;
+    border-radius: 6px;
+    box-shadow: 0 1px 20px rgba(43,50,88,.3);
+    transition: 0.2s;
+    z-index: 999;
+}
+.hamburger{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    width: 100%;
+    height: 100%;
+    padding-inline: 12px;
+}
+.hamburger.hidden{
+    display: none;
+}
+.ham-lines{
+    width: 100%;
+    height: 4px;
+    border-radius: 3px;
+    background-color: rgb(61, 180, 242);
+}
+
+.mobile-menu{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 5px;
+    padding: 10px 0px;
+    opacity: 0;
+    height: 0;
+    width: 0;
+    background-color: white;
+    transition: all 0.2s ease-in-out;
+    overflow: hidden;
+}
+
+.mobile-menu.visible{
+    opacity: 1;
+    transform: scale(1);
+    height: 150px;
+    width: 210px;
+    border-radius: 6px;
+}
+
+.mobile-menu-actions{
+    /* width: 66px;
+    height: 70px; */
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    /* font-size: 1.7rem; */
+    font-size: 1.4rem;
+    color: rgb(139, 160, 178);
+}
+.mobile-menu-actions-text{
+    font-size: 0.7rem;
+    font-weight: 700;
+}
+
+@media (max-width: 1040px) {
+    .navbar {
+        display: none;
+    }
+    .mobile-nav{
+        display: flex;
+    }
+}

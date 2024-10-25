@@ -1,0 +1,459 @@
+.list-editor-wrapper {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1050;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.358);
+    display: flex;
+    justify-content: center;
+    opacity: 0;
+    animation: fadeIn 0.3s forwards;
+    overflow: auto;
+}
+
+.list-editor-dialog {
+    z-index: 1051;
+    width: 1000px;
+    /* height: 609px; */
+    height: fit-content;
+    padding-bottom: 30px;
+    margin-top: 27vh;
+    margin-bottom: 8vh;
+    background-color: white;
+    border-radius: 7px;
+    box-shadow: 0 2px 33px rgba(0, 0, 0, .48);
+    opacity: 0;
+    transform: translateY(50px);
+    transition: all 0.3s ease;
+}
+
+.list-editor-wrapper.active .list-editor-dialog {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+.dialog-header {
+    height: 183px;
+    width: 100%;
+    /* display: flex;
+    align-items: flex-end;
+    padding: 10px 50px; */
+    /* background-color: #f5f5f5; */
+    /* position: relative; */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    box-shadow: inset 0 0 250px #000000;
+}
+
+.dialog-header-bg-shadow {
+    height: 100%;
+    width: 100%;
+    background: rgba(31, 40, 53, .65);
+    display: flex;
+    align-items: flex-end;
+    padding: 10px 50px;
+    position: relative;
+
+}
+
+.dialog-poster {
+    /* position: absolute; */
+    max-width: 120px;
+    margin-bottom: -40px;
+    /* top: 60px; */
+    border-radius: 4px;
+    background-color: #f5f5f5;
+}
+
+.dialog-poster img {
+    width: 100%;
+    border-radius: inherit;
+}
+
+.dialog-title {
+    font-size: 1.5rem;
+    margin-left: 10px;
+    /* margin-left: 150px; */
+    color: white;
+}
+
+.dialog-action {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.dialog-form {
+    display: flex;
+    gap: 69px;
+    height: max-content;
+    row-gap: 50px;
+    flex-wrap: wrap;
+    padding-top: 64px;
+    padding-inline: 50px;
+    position: relative;
+}
+
+
+.delete-confirmation{
+    display: none;
+    position: absolute;
+    top: 0;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.589);
+    border-radius: inherit;
+    z-index: 2051;
+}
+
+.delete-confirmation.show-delete{
+    display: flex;
+}
+
+.delete-card{
+    width: 300px;
+    height: 140px;
+    padding: 13px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    background-color: white;
+    border-radius: 4px;
+}
+
+.dc-highlighted{
+    font-weight: 500;
+}
+
+.dc-actions{
+    display: flex;
+    margin-left: auto;
+    gap: 12px;
+}
+
+.dform-fields {
+    width: 254px;
+    height: 63px;
+    /* background-color: gray; */
+}
+
+.dform-labels {
+    margin-bottom: 10px;
+    color: #5c728a;
+}
+
+.status-input {
+    position: relative;
+}
+
+.selected-status {
+    width: 100%;
+    height: 40px;
+    border-radius: 7px;
+}
+
+.new-list-input {
+    width: 90%;
+    padding-inline: 6px;
+    background-color: #edf1f5;
+    color: #5c728a;
+    border: none;
+}
+
+.new-list-input:focus-visible {
+    outline: none;
+}
+
+.dform-list {
+    display: block;
+    padding: 7px;
+    border-radius: 7px;
+    width: 100%;
+    color: #5c728a;
+    max-height: 300px;
+    position: absolute;
+    top: 54px;
+    overflow: auto;
+    transform: translateY(-20px);
+    opacity: 0;
+    box-shadow: 0 1px 10px 0 rgba(49, 54, 68, .15);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.dform-list.expanded {
+    z-index: 2099;
+    transform: translateY(0);
+    opacity: 1;
+    background-color: white;
+    pointer-events: auto;
+}
+
+.dform-list::-webkit-scrollbar{
+    display: none;
+}
+
+.status-down-arrow {
+    transition: transform 0.3s ease;
+}
+
+.status-down-arrow.rotate {
+    transform: rotate(180deg);
+}
+
+.dform-list::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: 20px;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 10px solid #edf1f5;
+    z-index: 2;
+}
+
+
+#selected-option {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #edf1f5;
+    color: #5c728a;
+    padding-inline: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.dform-list-option {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 10px;
+    border-radius: 7px;
+    cursor: pointer;
+}
+
+.dform-list-option:hover {
+    background-color: #edf1f5;
+}
+
+.dform-list-action {
+    padding: 10px;
+    border-radius: 7px;
+    cursor: pointer;
+}
+
+.dform-list-action:hover {
+    background-color: #3577ff;
+    color: white;
+}
+
+.dform-custom-lists{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #6c757d;
+    border-radius: 7px;
+}
+
+#custom-list-title{
+    color: white;
+    padding: 3px 10px;
+    background-color: #6c757d;
+    border-radius: 4px 4px 0 0;
+}
+
+
+.dform-input {
+    height: 40px;
+    background-color: #edf1f5;
+    border-radius: 7px;
+}
+
+#progress-box {
+    background-color: inherit;
+    display: flex;
+    gap: 7px;
+}
+
+/* .season-input-box,
+.episode-input-box {
+    height: 100%;
+    width: 50%;
+    background-color: #edf1f5;
+    border-radius: 7px;
+} */
+
+/* From Uiverse.io by alexruix */ 
+.progress-box-input-group {
+    position: relative;
+   }
+   
+   .progress-box-input {
+    border: 1.5px solid #d3d7db;
+    border-radius: 7px;
+    height : 100%;
+    width : 100%;
+    background: none;
+    padding: 7px;
+    font-size: 1rem;
+    transition: border 150ms cubic-bezier(0.4,0,0.2,1);
+   }
+   
+   .progress-box-label {
+    position: absolute;
+    left: 12px;
+    color: #5c728a;
+    pointer-events: none;
+    transform: translateY(0.5rem);
+    transition: 150ms cubic-bezier(0.4,0,0.2,1);
+   }
+   
+   .progress-box-input:focus {
+    outline: none;
+    border: 1.5px solid #9e9e9e;
+   }
+   
+   /* .progress-box-input:focus ~ label, input:valid ~ label {
+    transform: translateY(105%) scale(0.8);
+    background-color: white;
+    padding: 0 .2em;
+    color: #5c728a;
+   } */
+
+   .hasContent{
+    transform: translateY(105%) scale(0.8);
+    background-color: white;
+    padding: 0 .2em;
+    color: #5c728a;
+   }
+
+
+.dform-private{
+    position: relative;
+}
+
+.--pvtList{
+    top: 90px;
+}
+
+
+.private-input{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-inline: 10px;
+    color: #5c728a;
+    cursor: pointer;
+}
+
+#rating-input {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+}
+
+#notes-input {
+    height: max-content;
+}
+
+#notes-input-box {
+    height: max-content;
+}
+
+.notes-textarea {
+    border: none;
+    background-color: #edf1f5;
+    color: #5c728a;
+}
+
+
+
+.notes-textarea:hover {
+    background-color: #edf1f5;
+    outline: none;
+}
+
+.notes-textarea:focus {
+    background-color: #edf1f5;
+    outline: none;
+    border: none;
+    box-shadow: none;
+}
+
+.notes-textarea:focus-within {
+    outline: none;
+    border: none;
+}
+
+
+.dform-notes,
+.dform-action {
+    width: 100%;
+}
+
+.dform-action {
+    height: max-content;
+    display: flex;
+    align-items: end;
+    justify-content: end;
+}
+
+@media(max-width:1000px) {
+    .list-editor-dialog {
+        width: 100%;
+
+    }
+
+    .list-editor-dialog {
+        height: fit-content;
+        padding-bottom: 20px;
+    }
+
+    .dform-fields {
+        width: 100%;
+    }
+}
+
+@media(max-width:425px) {
+    .dialog-poster {
+        width: 110px;
+    }
+
+    .dialog-header-bg-shadow {
+        padding: 10px 20px;
+    }
+
+    .dialog-title {
+        /* margin-left: 106px; */
+        font-size: 1rem;
+    }
+
+    .dialog-form {
+        padding-inline: 20px;
+    }
+}

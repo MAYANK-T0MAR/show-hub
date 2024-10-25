@@ -1,0 +1,109 @@
+.user-reviews {
+    margin-top: -8vh;
+    color: #5c728a;
+}
+
+
+.user-reviews-content-container {
+    max-width: 1140px;
+    margin-inline: auto;
+    padding-inline: 50px;
+    padding-bottom: 100px;
+}
+
+.user-reviews-container {
+    display: grid;
+    grid-gap: 30px;
+    grid-template-columns: repeat(auto-fill,minmax(200px,1fr));
+    margin-top: 30px;
+    overflow: hidden;
+}
+
+.ur-card{
+    background: white;
+    border-radius: 4px;
+    display: grid;
+    grid-template-rows: 80px auto;
+    overflow: hidden;
+    transition: .2s;
+    cursor: pointer;
+}
+
+.ur-card-header{
+    width: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 4px 4px 0px 0px;
+
+}
+
+.urc-read-overlay{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #251f31cc;
+    color: white;
+    font-weight: 500;
+    opacity: 0;
+    transition: 0.3s;
+}
+
+
+.ur-card:hover .urc-read-overlay{
+    opacity: 1;
+}
+
+.ur-card-content{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    padding: 15px;
+}
+
+.urc-content-title{
+    font-weight: 500;
+    color: #5c728a;
+}
+
+
+
+.urc-content-text{
+
+    font-size: 0.9rem;
+    font-style: italic;
+    color : #9299a1;
+}
+
+
+.urc-content-likes{
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    display: flex;
+    gap: 7px;
+    color : #9299a1;
+    font-size: 0.9rem;
+}
+
+
+@media (max-width : 1040px) {
+    .user-reviews {
+        margin-top: 0;
+    }
+}
+
+@media (max-width : 760px) {
+
+    .user-reviews-content-container{
+        padding-inline: 20px;
+    }
+
+    .user-reviews-container {
+        flex-direction: column;
+        width: 100%;
+    }
+}

@@ -1,0 +1,121 @@
+.review-editor{
+    width: 100%;
+    height: 100%;
+    color: #5c728a;
+}
+
+.review-editor-container{
+    width: 100vw;
+    padding-top: 80px;
+    padding-inline: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 50px;
+    padding-bottom: 200px;
+}
+
+.re-summary, .re-main-text, .re-score, .re-private, .re-post{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 20px;
+    max-width: 850px;
+    min-width: 85vw;
+    border-radius: 4px;
+    background-color: white;
+    text-wrap: wrap;
+    overflow-wrap: anywhere;
+}
+
+.re-title{
+    font-weight: 500;
+}
+.re-suggestion{
+    font-size: 0.9rem;
+}
+
+.quill{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.quill div{
+    border: none !important;
+}
+.ql-container{
+    background-color: #edf1f5;
+    border-radius: 4px;
+}
+
+.re-score, .re-private, .re-private, .re-post{
+    background-color: transparent;
+    padding: 0;
+}
+
+.re-score-wrapper{
+    width: max-content;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 20px;
+    border-radius: 4px;
+    background-color: white;
+}
+
+
+
+.re-score-input{
+    position: relative;
+    width: 176px;
+    padding: 10px;
+    border-radius: 4px;
+    background-color: #edf1f5;
+    
+}
+
+.re-score-input input {
+    width: 100%;
+    border: none;
+    background-color: inherit;
+}
+
+.re-score-input input:focus-visible{
+    outline: none;
+}
+
+.re-private-wrapper{
+    width: max-content;
+    display: flex;
+    gap: 10px;
+    padding-inline: 10px;
+    border-radius: 4px;
+    /* background-color: white; */
+}
+
+.re-post-wrapper{
+    display: flex;
+    gap: 10px;
+    padding-inline: 10px;
+    border-radius: 4px;
+}
+
+
+
+.post-btn{
+    color: white;
+    width: 176px;
+    padding: 10px;
+    text-align: center;
+    border-radius: 4px;
+}
+
+.re-error-item{
+    margin-bottom: 10px;
+    padding: 10px;
+    text-align: center;
+    border-radius: 4px;
+    background-color: #e85d75;
+    color: white;
+}

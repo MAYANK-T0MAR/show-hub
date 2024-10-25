@@ -1,0 +1,222 @@
+.social-posts{
+    min-width: 100vw;
+    padding-bottom: 60px;
+    display: flex;
+    justify-content: center;
+    margin-top: 50px;
+    color: #5C728A;
+}
+
+.social-posts-wrapper{
+    width: calc(279px + 58vw);
+    display: flex;
+    gap: 30px;
+}
+
+
+.forum-threads-data, .reviews-data{
+    flex: 1;
+}
+
+.social-posts-header{
+    display: flex;
+    justify-content: space-between;
+    color: #5C728A;
+    margin-bottom: 10px;
+}
+
+.social-posts-header a{
+    color: #5C728A;
+}
+
+.social-posts-header span{
+    font-weight: 500;
+
+}
+
+.social-post-action{
+    font-weight: 400;
+    border-radius: 6px;
+    border-left: 1px solid;
+    border-right: 1px solid;
+    border-top: none;
+    border-bottom: none;
+    padding-inline: 7px;
+    cursor: pointer;
+}
+
+
+.social-thread-card{
+    width: 100%;
+    padding: 18px;
+    background-color: white;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.social-thread-card a{
+    color: #5C728A;
+}
+
+.thread-card-title{
+    font-size: 1rem;
+    line-height: 1.3;
+    margin-right: 110px;
+    margin-bottom: 12px;
+    cursor: pointer;
+}
+
+.thread-card-stats{
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    display: flex;
+    gap: 12px;
+    font-size: 0.9rem;
+    color: #9299a1;
+}
+
+.tc-stats-views i, .tc-stats-comments-counts i{
+    margin-right: 6px;
+}
+
+
+.tc-catagory{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+
+.tc-catagory span{
+    background-color: rgb(104, 11, 184);
+    color: white;
+    font-size: 0.8rem;
+    padding: 4px 8px;
+    border-radius: 15px;
+    margin-right: 5px;
+    cursor: pointer;
+}
+
+.thread-card-footer{
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+.tc-avatar{
+    width: 25px;
+    height: 25px;
+    border-radius: 4px;
+    background-color: gray;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    cursor: pointer;
+}
+
+.tc-name{
+    cursor: pointer;
+}
+
+
+
+
+.social-review-card{
+    display: flex;
+    gap: 20px;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+/* .social-review-card a{
+    display: flex;
+    flex : 1;
+    color: inherit;
+} */
+
+.review-content-box a{
+    display: flex;
+    flex : 1;
+    color: #5C728A;
+}
+
+.review-pfp{
+    width: 50px;
+    height: 50px;
+    border-radius: 4px;
+    /* background-color: gray; */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    cursor: pointer;
+}
+
+.review-content-box{
+    padding: 17px 15px;
+    padding-right: 27px;
+    font-style: italic;
+    line-height: 1.4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    flex: 1;
+    background-color: white;
+    color: #5C728A;
+    position: relative;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.review-content-box::before{
+    border-color: transparent white transparent transparent;
+    border-style: solid;
+    border-width: 6px 9px 6px 0;
+    content: "";
+    display: block;
+    height: 10px;
+    left: -9px;
+    position: absolute;
+    top: 12px;
+    width: 0;
+}
+
+.review-content-box:hover{
+    box-shadow: 0 2px 20px 0 rgba(6,13,34,.05);
+}
+
+.review-content-like{
+    display: flex;
+    gap: 3px;
+    position: absolute;
+    font-size: 0.9rem;
+    bottom: 6px;
+    right: 6px;
+    color: #9299a1;
+}
+
+
+
+.social-posts-NA{
+    background-color: white;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+
+@media (max-width: 430px) {
+
+    .social-posts-wrapper{
+        width: 90vw;
+        flex-direction: column;
+    }
+
+    .thread-card-title{
+        font-size: 0.9rem;
+    }
+
+}
