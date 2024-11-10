@@ -9,7 +9,22 @@ const Review = require('./models/Review');
 const Forum = require('./models/Forum');
 const app = express();
 
-app.use(cors());
+const allowedOrigins = [
+  'https://show-hub.vercel.app/', // Vercel URL for production
+  'http://localhost:3000' // Localhost for development
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    // allow requests with no origin (like mobile apps, curl requests)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  }
+}));
 
 //Accessing Environment Variables
 const PORT = process.env.PORT || 5000;
