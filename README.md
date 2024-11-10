@@ -82,7 +82,8 @@ This project utilizes the [TVMaze API](https://www.tvmaze.com/api) to fetch show
 
 1. **Clone the Repository**
    ```bash
-   git clone <repository-url>```
+   git clone <repository-url>
+   ```
 
 2. **Navigate to Project Directories**:
    - Frontend (React): `client`
