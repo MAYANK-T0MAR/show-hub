@@ -38,7 +38,7 @@ function ForumThread() {
     const getForumDetails = async () => {
         if (id) {
             try {
-                let response = await axios.get(`http://localhost:5000/forum/${id}`);
+                let response = await axios.get(`${process.env.REACT_APP_API_URL}/forum/${id}`);
                 let sortedData = response.data;
 
                 // Sort comments by timestamp in descending order

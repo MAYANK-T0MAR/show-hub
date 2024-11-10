@@ -35,7 +35,7 @@ function Content() {
     const getUserData = async () => {
         setloading(true);
         try {
-            let response = await axios.get(`http://localhost:5000/search-users/${query}`);
+            let response = await axios.get(`${process.env.REACT_APP_API_URL}/search-users/${query}`);
             setuserData(response.data);
             setloading(false);
         } catch (error) {

@@ -17,7 +17,7 @@ function UserReviews() {
 
   const getUserReviewsData = async (username) => {
     try {
-      const response = await axios.get(`http://localhost:5000/${username}/user-reviews`, {
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/${username}/user-reviews`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

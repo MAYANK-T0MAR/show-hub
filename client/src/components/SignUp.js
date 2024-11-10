@@ -96,7 +96,7 @@ function SignUp({ isOpen, onClose, loginOpened, openLogin }) {
 
     const checkAvailability = async (field, value) => {
         try {
-            const response = await axios.post(`http://localhost:5000/check-${field}`, { value });
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/check-${field}`, { value });
             return response.data.available;
         } catch (error) {
             console.error(`There was an error checking ${field} availability:`, error);
@@ -134,7 +134,7 @@ function SignUp({ isOpen, onClose, loginOpened, openLogin }) {
         }
 
         try {
-            const response = await axios.post('http://localhost:5000/signup', formData);
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/signup`, formData);
             localStorage.setItem('token', response.data.token);
             localStorage.setItem('userId', response.data.userId);
             console.log("User created successfully:", response.data);
@@ -159,7 +159,7 @@ function SignUp({ isOpen, onClose, loginOpened, openLogin }) {
         }
 
         try {
-            const response = await axios.post('http://localhost:5000/login', loginFormData);
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/login`, loginFormData);
             localStorage.setItem('token', response.data.token);
             localStorage.setItem('userId', response.data.userId);
             console.log("User logged in successfully:", response.data);

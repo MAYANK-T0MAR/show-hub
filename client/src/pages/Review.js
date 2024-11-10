@@ -30,7 +30,7 @@ function Review() {
 
     const getReviewData = async (id) => {
         try {
-            const response = await axios.get(`http://localhost:5000/review/${id}`, {
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/review/${id}`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -44,7 +44,7 @@ function Review() {
 
     const likeReview = async(id) => {
         try {
-            const response = await axios.post(`http://localhost:5000/review/${id}/like`, {}, {
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/review/${id}/like`, {}, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -58,7 +58,7 @@ function Review() {
 
     const disLikeReview = async(id) => {
         try {
-            const response = await axios.post(`http://localhost:5000/review/${id}/dislike`, {}, {
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/review/${id}/dislike`, {}, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }

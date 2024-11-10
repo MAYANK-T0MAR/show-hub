@@ -15,7 +15,7 @@ function CommentEditor({ forumId, showCommentEditor, setShowCommentEditor, place
     const postComment = async () => {
         if (!replyingToId) {
             try {
-                let response = await axios.post(`http://localhost:5000/post-comment/${forumId}`, dataToPost, {
+                let response = await axios.post(`${process.env.REACT_APP_API_URL}/post-comment/${forumId}`, dataToPost, {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
@@ -31,7 +31,7 @@ function CommentEditor({ forumId, showCommentEditor, setShowCommentEditor, place
             console.log(`replying to id : ${replyingToId} and username : ${replyingToUser}`);
             
             try {
-                let response =  await axios.post(`http://localhost:5000/post-reply/${forumId}/${replyingToId}`, dataToPost, {
+                let response =  await axios.post(`${process.env.REACT_APP_API_URL}/post-reply/${forumId}/${replyingToId}`, dataToPost, {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }

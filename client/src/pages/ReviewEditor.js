@@ -64,7 +64,7 @@ function ReviewEditor() {
         if(reviewHasMoreThan2200Character() && reviewSummaryIsLongEnough()){
             try {
                 const response = await axios.post(
-                    'http://localhost:5000/post-review',
+                    `${process.env.REACT_APP_API_URL}/post-review`,
                     reviewData,
                     {
                         headers: {

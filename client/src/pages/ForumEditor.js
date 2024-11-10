@@ -157,7 +157,7 @@ function ForumEditor() {
         if (descriptionHasMoreThan20Character() && forumTitleIsLongEnough()) {
             try {
                 const response = await axios.post(
-                    'http://localhost:5000/post-forum',
+                    `${process.env.REACT_APP_API_URL}/post-forum`,
                     forumData,
                     {
                         headers: {

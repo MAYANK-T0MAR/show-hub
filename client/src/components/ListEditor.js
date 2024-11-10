@@ -105,7 +105,7 @@ function ListEditor({ closeListEditor, poster, banner, title, showId }) {
     const updateList = async () => {
         if (authenticated) {
             try {
-                const response = await axios.get(`http://localhost:5000/show-lookup/${showId}`, {
+                const response = await axios.get(`${process.env.REACT_APP_API_URL}/show-lookup/${showId}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
@@ -147,7 +147,7 @@ function ListEditor({ closeListEditor, poster, banner, title, showId }) {
         updateList();
         const fetchLists = async () => {
             try {
-                const response = await axios.get("http://localhost:5000/list-lookup", {
+                const response = await axios.get(`${process.env.REACT_APP_API_URL}/list-lookup`, {
                     headers: {
                         Authorization: `Bearer ${token}`
                     },
@@ -265,7 +265,7 @@ function ListEditor({ closeListEditor, poster, banner, title, showId }) {
         setLoading(true);
         try {
             const response = await axios.post(
-                'http://localhost:5000/add-show',
+                `${process.env.REACT_APP_API_URL}/add-show`,
                 listData,
                 {
                     headers: {
@@ -286,7 +286,7 @@ function ListEditor({ closeListEditor, poster, banner, title, showId }) {
         setLoading(true);
         try {
             const response = await axios.delete(
-                `http://localhost:5000/remove-show/${listData.listname}/${listData.showId}`,
+                `${process.env.REACT_APP_API_URL}/remove-show/${listData.listname}/${listData.showId}`,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`, // Include the token in the request header

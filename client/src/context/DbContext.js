@@ -8,6 +8,7 @@ import GlobalAlert from "../components/GlobalAlert";
 
 
 
+
 export const DbContext = createContext();
 
 const DbContextProvider = (props) => {
@@ -82,7 +83,7 @@ const DbContextProvider = (props) => {
 
     const refreshToken = async () => {
         try {
-            const response = await axios.post('http://localhost:5000/refresh-token', {}, {
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/refresh-token`, {}, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -100,7 +101,7 @@ const DbContextProvider = (props) => {
     const fetchProfile = async (username) => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.get(`http://localhost:5000/user/${username}`, {
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/user/${username}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -142,7 +143,7 @@ const DbContextProvider = (props) => {
 
     const likeForum = async(forumId) => {
         try {
-            const response = await axios.post(`http://localhost:5000/forum/like/${forumId}`, {}, {
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/forum/like/${forumId}`, {}, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }

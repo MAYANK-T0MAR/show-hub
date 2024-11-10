@@ -13,7 +13,7 @@ function SocialPosts() {
 
     const getReviews = async (id) => {
         try {
-            const response = await axios.get(`http://localhost:5000/reviews/${id}`);
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/reviews/${id}`);
             console.log('Reviews:', response.data);
             setReviews(response.data);
         } catch (error) {
@@ -26,7 +26,7 @@ function SocialPosts() {
         try {
             console.log(`id received : ${id}`);
 
-            const response = await axios.get(`http://localhost:5000/forums/show/${id}`);
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/forums/show/${id}`);
             setForums(response.data);
         } catch (error) {
             console.error('error fetching forums:', error)
