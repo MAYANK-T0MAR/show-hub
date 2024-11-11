@@ -114,7 +114,10 @@ Create a `.env` file in the `server` directory with the following variables:
 - `MONGODB_URI` – MongoDB connection string.
 - `JWT_SECRET` – Secret key for JWT token generation.
 - `PORT` – Port number for the server (default: 5000).
-- `REACT_APP_API_URL` – Base URL for backend API (only needed in the `client` if communicating directly).
+
+Create a `.env` file in the `client` directory with the following variable:
+
+- `REACT_APP_API_URL` – Base URL for backend API (use `http://localhost:5000` if running locally).
 
 ## Usage
 
