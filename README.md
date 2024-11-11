@@ -1,6 +1,6 @@
 # show-hub
 
-A comprehensive show organizer platform built with **React, Node, Express, and MongoDB**, providing users with extensive features to manage lists, write reviews, participate in forums, and explore detailed show information.
+A TV-show organizer platform built with **React, Node, Express, and MongoDB**, providing users with extensive features to manage lists, write reviews, participate in forums, and explore detailed show information.
 
 ## Table of Contents
 
