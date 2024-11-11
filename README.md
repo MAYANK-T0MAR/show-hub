@@ -6,6 +6,8 @@ Check out the live demo of the project [here](https://show-hub.vercel.app)
 ## Overview
 A TV-show organizer platform with responsive UI built with **React, Node, Express, and MongoDB**, providing users with extensive features to manage lists, write reviews, participate in forums, and explore detailed show information.
 
+> **NOTE** : This project is currently in a **prototype phase** and serves as a foundational version. While it includes core features, substantial testing and improvements are required and yet to be done to enhance functionality, stability, and performance.
+
 ## Table of Contents
 
 - [Features](#features)
