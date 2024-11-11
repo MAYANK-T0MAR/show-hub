@@ -105,12 +105,6 @@ This project utilizes the [TVMaze API](https://www.tvmaze.com/api) to fetch show
      npm install
      ```
 
-4. **Initialize Git in the Server Directory**
-   - Initialize Git in the `server` folder for version control and commit tracking.
-   ```bash
-   cd server
-   git init
-   ```
 ## Environment Variables
 
 Create a `.env` file in the `server` directory with the following variables:
