@@ -10,7 +10,7 @@ const Forum = require('./models/Forum');
 const app = express();
 
 const allowedOrigins = [
-  'https://show-hub.vercel.app/', // Vercel URL for production
+  'https://show-hub.vercel.app', // Vercel URL for production
   'http://localhost:3000' // Localhost for development
 ];
 
