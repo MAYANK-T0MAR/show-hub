@@ -1,103 +1,560 @@
-<ContentSection title="Introduction">
-# Building a space where TV lovers can finally keep track of everything they watch (and talk about it too)
-Show-Hub started with a pretty simple frustration — you know that feeling when you finish a show, and can’t remember what episode you left off on, or which one your friend said had “the twist”? Yeah, that.  
-So I built a place that keeps it all together.  
+<ContentSection title="The Problem">
 
-Show-Hub is a **TV show organizer platform** built with React, Node, Express, and MongoDB. It’s designed to let users track what they’re watching, write reviews, join discussions, and explore detailed show information — all from one clean, responsive interface.  
+# Building a TV Show Organizer That Actually Remembers What You're Watching And What You Thought About It
 
-This version is still in its **prototype phase** — a foundation that works, but with room to grow. The essential features are live, but I’m still refining stability, performance, and overall polish.  
+You know that moment when someone asks what you're watching and you... *blank*? Or when you swear you started that critically acclaimed series everyone raved about, but you can't remember if you made it past episode three?
+
+Yeah, that's the thing about streaming culture. We've got **infinite content** at our fingertips, but **zero system** for tracking what matters to us. Mental notes don't cut it. Screenshots of show titles feel desperate. And those generic "watchlist" features on streaming platforms? They're basically digital junk drawers.
+
+I built Show-Hub because I was tired of losing track of my own viewing life. Not just *what* I watched, but what I **thought** about it. Where I stopped. Why I stopped. Whether that one episode everyone talks about actually lived up to the hype.
+
+This is a case study about building something for people who treat TV shows like a real hobby—because honestly, they are.
+
 </ContentSection>
 
-<ContentSection>
-# What makes Show-Hub different — a central place for shows, lists, and conversations
-At its core, Show-Hub isn’t just about tracking what you’ve watched — it’s about *connecting* with what you love and who you share it with.  
+<ContentSection title="Core Features">
 
-Here’s what it does:
-- **Secure login/signup** with JWT-based authentication.
-- **Search for any show**, complete with metadata like ratings, episode counts, air dates, and summaries.
-- Dive deep into **show details** — from cast and seasons to top-rated episodes.
-- **Add shows to personal lists**, so you can build your own “watching” dashboard.
-- **Find other users**, browse their public lists, and read their reviews.
+# What Show-Hub Actually Does And Why Each Feature Matters To Real Users
 
-It’s like having IMDb, MyAnimeList, and Reddit discussions rolled into one focused hub — but tailored to TV shows.
+Here's the core idea: Show-Hub is a platform where you can organize every show you're watching, planning to watch, or have already binged into oblivion. But it goes way deeper than simple lists.
+
+It starts with the basics:
+
+- **Secure login and signup** with JWT-based authentication so your data stays yours
+- **Comprehensive show search** that lets you find any show and dive into everything about it
+- **Detailed show information** including posters, banners, ratings, episode counts, premiere dates, and full summaries
+- **Season and episode breakdowns** with individual episode information
+- **Cast lists** and external links for additional context
+
+But here's where it gets interesting.
+
+## Lists that actually reflect how you watch TV
+
+Everyone gets **three default lists** right off the bat:
+
+- **Plan to Watch** for shows on your radar
+- **Watching** for what you're currently following
+- **Completed** for finished series
+
+But you can also create **custom lists**—because maybe you need a "Comfort Rewatches" list or "Shows That Destroyed Me Emotionally" or whatever organization system makes sense to your brain.
+
+And get this: **you control visibility**. Set entire lists as public or private. Set individual entries as public or private. Because sometimes you want to share your impeccable taste, and sometimes you just want to track that guilty pleasure show without judgment.
+
+For each show in your lists, you can:
+
+- Track your **episode progress** (currently on S2E7)
+- Add **personal ratings** on your own scale
+- Note **start and finish dates**
+- Write **personal notes** about your experience
+- Control **visibility settings** for each entry
+
+It's like a journal for your viewing habits.
+
+## Reviews with actual depth and formatting options
+
+Reading reviews is one thing. Writing them is where Show-Hub gets fun. There's a **rich text editor** that lets you format your thoughts properly:
+
+- **Headings** to organize sections
+- **Quotes** for memorable dialogue
+- **Code blocks** if you're feeling technical
+- **Embedded images** for screenshots and visual evidence
+- **Embedded videos** and YouTube clips to reference specific scenes
+
+And yeah, reviews can be **public or private** too. Sometimes you want to contribute to the conversation. Sometimes you just need to process what you watched.
+
+Other users can **like or dislike reviews**, which creates this organic curation system where thoughtful takes rise to the top.
+
+## Forums that don't feel like shouting into the void
+
+Every show has its **own forum space**. You can:
+
+- Create **discussion threads** under different categories
+- **Reply to posts** and other replies for real threading
+- Use the **same rich text editor** with formatting, links, and media embeds
+- Organize conversations by **topic categories** (episode discussions, theories, general chat)
+
+It's designed to feel like actual conversation, not just scattered comments disappearing into an algorithm.
+
+## Finding your people through user search and profiles
+
+**User search** lets you discover other viewers:
+
+- Check out their **profiles**
+- Browse their **public lists**
+- Read their **reviews**
+- See what they're watching and what they think about it
+
+It's the social layer that most tracking apps completely miss. Because honestly, half the fun of watching great TV is finding someone else who *Gets It*.
+
 </ContentSection>
 
-<ContentSection title="Lists management">
-# Creating a more personal, flexible way to organize what you watch
-Everyone organizes differently. Some of us love neat categories; others just need to remember what they started.  
-So Show-Hub gives you both.  
+<ContentSection title="Technical Stack">
 
-Each user begins with **three default lists** — *Plan to Watch*, *Watching*, and *Completed*.  
-But if you’re the kind of person who loves curating collections like “Comfort Shows” or “Guilty Pleasures,” you can create **custom lists** too.  
+# The Technical Foundation And Why These Choices Made Sense For Something That Could Actually Scale
 
-You control visibility — public or private — even down to individual entries.  
-And you can edit each list entry with personal data like:
-- Ratings  
-- Episode progress  
-- Start/finish dates  
-- Notes  
+Look, I could've thrown together a basic CRUD app and called it done. But if you're building something meant to handle potentially **thousands of shows**, **hundreds of users**, **nested forum replies**, and **rich media content**... you need architecture that won't collapse under its own weight.
+
+## Frontend built with React for component flexibility
+
+**React.js** handles the frontend because component-based design is perfect for something this modular. Lists, reviews, forums, show details—they're all discrete pieces that need to work independently and together. 
+
+Plus, React's **state management** keeps the UI responsive even when you're juggling multiple data streams simultaneously.
+
+## Backend powered by Node and Express
+
+**Node.js** and **Express.js** power the backend. Lightweight, fast, and honestly just pleasant to work with. 
+
+Express gives you the flexibility to structure API routes however makes sense for your data model, and Node handles **async operations smoothly**—which matters when you're fetching show data, user data, and forum threads all at once.
+
+## MongoDB for flexible data structures
+
+**MongoDB** for the database was the obvious choice here. Shows, users, lists, reviews, forums—they all have **variable data structures**:
+
+- Some shows have ten seasons, some have one
+- Some users have three lists, some have thirty
+- Some reviews are short, some are essays with embedded media
+
+NoSQL flexibility means I'm not fighting against rigid schemas every time the data needs to breathe.
+
+## JWT authentication and React-Quill for rich editing
+
+**JWT authentication** keeps things secure without the overhead of session management. Tokens handle auth state cleanly across the frontend and backend.
+
+**React-Quill** provides that rich text editing experience. I wanted users to be able to format their thoughts properly without learning markdown or HTML. **WYSIWYG** just makes sense for reviews and forum posts.
+
+## The TVMaze API as the comprehensive data source
+
+All the show information—metadata, episode details, cast, ratings, everything—comes from the **TVMaze API**. It's:
+
+- **Comprehensive** with detailed show data
+- **Well-maintained** with regular updates
+- **Free** for non-commercial use
+
+Rather than scraping data or building some massive proprietary database, I could focus on the features that actually differentiate Show-Hub: the organization, the social layer, the personal tracking.
+
 </ContentSection>
 
-<ContentSection title="Reviews">
-# Writing and reading reviews — building conversations through words, not algorithms
-Ever read a review that perfectly captured what you felt about a show? That’s the kind of space I wanted to build.  
+<ContentSection title="Deep Dive">
 
-Under each show, users can **read reviews**, **like or dislike** them, and most importantly — **write their own**.  
+# Features That Actually Change How You Interact With TV Shows On A Daily Basis
 
-The built-in rich text editor (powered by React-Quill) supports:
-- Headings  
-- Quotes  
-- Code blocks  
-- Embedded media (images, videos, YouTube links)  
+Let me walk you through the stuff that makes Show-Hub feel different from just another list app.
 
-And if you’re someone who prefers to keep your thoughts private, you can mark your review as *private*. Sometimes it’s not about sharing — it’s about remembering.
+## Show details that give you the full picture
+
+When you search for a show, you're not getting some bare-bones title and thumbnail. You get **everything**:
+
+- **High-quality poster and banner images** for visual appeal
+- **Complete metadata** including ratings, total episode count, premiere date, end date (if applicable)
+- **Proper summaries** that actually tell you what you're getting into
+- **Season and episode breakdowns** with descriptions and individual ratings
+- **Top-rated episodes section** so you know which ones are worth prioritizing
+- **Cast information** with actor details
+- **External links** to IMDb, official sites, and other resources
+
+Then it breaks down by season and episode. You can see every single episode, read descriptions, check ratings for individual episodes. There's even a "Top-Rated Episodes" section so you know which ones are worth prioritizing if you're cherry-picking.
+
+Cast information is right there too. Sometimes you're watching something specifically because of an actor, or you recognize someone and want to confirm where you've seen them before.
+
+## List management that adapts to how your brain works
+
+Those **three default lists** (Plan to Watch, Watching, Completed) cover the basics. But **custom lists** are where personalization happens:
+
+- "Shows Recommended by Friends" to track suggestions
+- "Animated Series" because that's a whole different vibe
+- "Canceled Too Soon" for the heartbreak collection
+- Whatever organizational system makes sense to *your* brain
+
+The **granular visibility controls** are crucial. You might want your "Watching" list public to spark conversations, but keep your "Comfort Rewatches" private because who needs judgment for watching *The Office* for the fifth time?
+
+And for each entry in your lists, you're tracking:
+
+- **Episode progress** (currently on S2E7)
+- **Personal ratings** on your own scale
+- **Start and finish dates** to remember your viewing timeline
+- **Personal notes** about your experience
+
+It's the difference between "yeah, I watched that" and actually **remembering your relationship** with a show.
+
+## Reviews that feel like real criticism with proper structure
+
+The review system isn't just star ratings and a comment box. It's a **proper writing environment**.
+
+With React-Quill's rich text editor, you can structure your thoughts like an actual essay or blog post:
+
+- Use **headings** to organize sections
+- **Quote** dialogue or memorable lines
+- Embed **images** for screenshots of cinematography, poster comparisons, whatever visual evidence supports your point
+- Embed **videos or YouTube links** to reference specific scenes or analyses
+- Use **code blocks** if you want to diagram plot structure or break down story beats technically (I see you, screenwriting nerds)
+
+The **like/dislike system** creates a natural quality filter:
+
+- Thoughtful, well-argued reviews get **surfaced**
+- Lazy hot takes **sink**
+- It's democratic but meritocratic
+
+And that **public/private toggle**? Sometimes you want to contribute to the discourse. Sometimes you just need to process your feelings about a devastating finale. Both are valid.
+
+## Forums designed for actual conversation and threading
+
+**Show-specific forums** mean discussions stay focused and discoverable. If you want to talk about *Better Call Saul*'s cinematography or debate *Succession*'s ending, there's a dedicated space for that.
+
+Creating forums under **categories** keeps things organized:
+
+- Episode discussions
+- Fan theories
+- General chat
+- Technical analysis
+- Whatever topic needs its own space
+
+The **reply-to-reply structure** allows real threading. Someone posts a theory, you respond with evidence, someone else adds a counterpoint, another person brings in context from the source material. It unfolds naturally.
+
+Same **rich text editor** works here—format your posts, add emphasis, embed clips or images to make your point. It's built for **depth**, not just quick reactions.
+
+## The social layer nobody else bothered with
+
+**User search** might seem basic, but it's surprisingly rare in tracking apps. Being able to:
+
+- **Find other users** by username
+- **View their profiles** and get a sense of their taste
+- **Browse their public lists** to discover new shows
+- **Read their reviews** to decide if that obscure show is worth your time
+
+That's how **communities form**.
+
+You discover someone with impeccable taste in sci-fi. You see what they're watching. You read their reviews to decide if that obscure show is worth your time. You realize you have overlapping comfort shows and suddenly you've found your people. 
+
+It's the **connective tissue** that transforms Show-Hub from a personal tool into a platform.
+
 </ContentSection>
 
-<ContentSection title="Forums">
-# Where discussions go beyond one-line reviews and become real conversations
-This part was born from the realization that people don’t just want to *rate* shows — they want to *talk* about them.  
+<ContentSection title="Reality Check">
 
-Every show on Show-Hub has its own **dedicated forum**, where users can post topics, reply, and dive deep into fan theories or episode breakdowns.  
+# The Honest Reality Check Because This Is Still A Prototype And I'm Not Going To Pretend Otherwise
 
-Replies and posts use the same **rich text editor** as reviews, so people can share images, quotes, and links — not just plain text.  
+Okay, real talk. Show-Hub **works**. The features exist, the architecture is solid, users can actually do everything I've described. But it's a **prototype**, and I'm not going to pretend otherwise.
 
-There’s even support for **forum categories**, so you can separate show-specific threads from general TV discussions. It feels like a community rather than just a content app.
+Here's what that means in practice.
+
+## Testing is minimal and needs comprehensive coverage
+
+I've done the obvious stuff:
+
+- ✓ Make sure auth works
+- ✓ Ensure lists save properly
+- ✓ Verify forum posts actually post
+
+But comprehensive testing across edge cases? **Still needed**:
+
+- ✗ Stress testing with hundreds of concurrent users
+- ✗ Accessibility audits for screen readers and keyboard navigation
+- ✗ Security penetration testing
+- ✗ Cross-browser compatibility testing
+- ✗ Mobile device testing across different screen sizes
+
+Those are still on the roadmap.
+
+## Performance could be way better with optimization
+
+Right now it handles typical usage fine. But I haven't:
+
+- Optimized **database queries** aggressively
+- Implemented **caching strategies** for frequently accessed data
+- Fine-tuned **bundle sizes** to reduce initial load times
+- Added **lazy loading** for images and components
+- Integrated a **CDN** for media delivery
+
+For a prototype, it's responsive enough. For a production app serving thousands of users? It needs work.
+
+## Error handling is functional but not graceful
+
+If something breaks, it won't crash spectacularly, but the **user experience of errors** could be much more polished:
+
+- Better **error messages** that actually explain what went wrong
+- **Graceful degradation** when things break
+- Clear **recovery paths** so users know what to do next
+- **Loading states** that don't feel like the app is frozen
+
+## The UI is responsive but has room for refinement
+
+The interface works, but there's polish missing:
+
+- **Smoother transitions** between states
+- **Better visual feedback** for user actions
+- **Clearer information hierarchy** in some sections
+- **Purposeful animations** that guide attention without distracting
+
+It works, but it doesn't *shine* yet.
+
+Why am I telling you this? Because I think it's important to be **honest** about where a project actually is. Show-Hub proves the concept. It demonstrates that this approach to TV tracking—combining organization, reviews, forums, and social discovery—actually enhances how people engage with shows.
+
+But **substantial improvements are required** before it's truly production-ready. Stability needs hardening. Performance needs optimization. Features need polish. That's the nature of prototypes. They're **proof of possibility**, not finished products.
+
 </ContentSection>
 
-<ContentSection title="Data source">
-# Keeping things accurate and up to date with real show information
-All show data comes directly from the **TVMaze API** — including metadata, cast details, and episode breakdowns.  
-This keeps the information current, clean, and consistent without needing manual updates.
+<ContentSection title="Key Learnings">
+
+# What I Learned Building Something People Might Actually Use In Their Daily Lives
+
+Building Show-Hub taught me things you don't learn from tutorials or coding challenges.
+
+## Feature creep is real and seductive
+
+I kept thinking of new capabilities:
+
+- Maybe add **streaming service integration**
+- Maybe build a **recommendation algorithm**
+- Maybe create **watch parties**
+- Maybe add **subtitle search**
+
+Every idea sounded cool. But each one would've delayed actually shipping something usable. Learning to say **"not yet, that's v2.0"** was crucial.
+
+## Architecture decisions compound over time
+
+The choices I made early in development had **ripple effects** throughout the entire project:
+
+- Choosing **MongoDB** early meant flexibility later when data structures needed to evolve
+- Choosing **React** meant component reusability that saved weeks of development
+- Choosing **JWT** meant stateless authentication that scaled easily
+- Choosing the **TVMaze API** meant reliable data without maintenance overhead
+
+Those early technical choices **echo through the entire project**.
+
+## User experience is about removing friction not adding features
+
+The **visibility controls** for lists and entries? That wasn't in the original design. But I realized people would **hesitate to use lists publicly** if they couldn't control what others saw. 
+
+One small feature removed a **major barrier to engagement**. Sometimes the best feature is the one that gets out of the way.
+
+## Rich text editing changes everything for user content
+
+Once people could **format reviews and forum posts properly**, the quality of contributions jumped noticeably:
+
+- Reviews became **structured arguments** instead of rambling paragraphs
+- Forum posts included **visual evidence** to support claims
+- Discussions felt more **professional and thoughtful**
+
+Giving users better tools **elevates the entire platform**.
+
+## The social layer can't be an afterthought
+
+User search, public profiles, visible reviews—that's not **decoration**. That's the **difference** between a personal tool and a community platform. 
+
+People want to:
+
+- **Share** their taste and opinions
+- **Compare** their viewing habits with others
+- **Discover** new shows through trusted recommendations
+- **Connect** with people who share their interests
+
+Building for that from the start matters. Trying to add it later would've meant rebuilding half the architecture.
+
+## Prototypes need honesty not excuses
+
+I could've hidden the fact that:
+
+- Testing is incomplete
+- Performance isn't optimized
+- Some features are rough around the edges
+- The UI needs refinement
+
+But that would be **dishonest**. Acknowledging where a project actually is builds **trust** and sets **realistic expectations**. People respect transparency more than they respect false perfection.
+
 </ContentSection>
 
-<ContentSection title="Tools">
-# Under the hood — technologies that power everything behind the scenes
-The tech stack is straightforward but solid:
-- **Frontend:** React.js  
-- **Backend:** Node.js + Express.js  
-- **Database:** MongoDB  
-- **Authentication:** JWT (JSON Web Token)  
-- **Rich Text Editor:** React-Quill  
+<ContentSection title="Future Plans">
 
-Each piece plays its part — React for responsive UI, Node and Express for scalable routes and APIs, MongoDB for flexible data storage, and JWT for secure authentication.
+# Where This Goes Next And Why It Matters Beyond Just One App
+
+Show-Hub as it exists now proves something important: people want **more sophisticated tools** for engaging with TV shows. Not just watchlists. Actual organization, actual memory, actual conversation.
+
+The immediate priorities are clear.
+
+## Testing needs to be comprehensive and thorough
+
+**Unit tests** for critical functionality:
+
+- Authentication flows
+- List creation and modification
+- Review submission and editing
+- Forum post creation and replies
+
+**Integration tests** for user flows:
+
+- Complete signup to first review journey
+- Search to list addition workflow
+- Forum creation to discussion participation
+
+**Performance testing** under load:
+
+- Database query performance with thousands of records
+- Concurrent user handling
+- API response times under stress
+
+**Security audits**:
+
+- JWT token handling
+- Input sanitization
+- SQL injection prevention (even with NoSQL)
+- XSS vulnerability checks
+
+**Accessibility compliance**:
+
+- Screen reader compatibility
+- Keyboard navigation
+- Color contrast ratios
+- Focus indicators
+
+The unsexy stuff that makes software **reliable**.
+
+## Performance optimization can't wait much longer
+
+**Database query optimization**:
+
+- Index frequently queried fields
+- Optimize join operations
+- Implement query result caching
+
+**Caching strategies** for frequently accessed data:
+
+- Show metadata that rarely changes
+- User profile information
+- Popular forum threads
+
+**Frontend bundle size reduction**:
+
+- Code splitting by route
+- Tree shaking unused dependencies
+- Minification and compression
+
+**Lazy loading** for images and components:
+
+- Load show posters on demand
+- Defer non-critical JavaScript
+- Progressive image loading
+
+**CDN integration** for media:
+
+- Distribute static assets globally
+- Reduce server load
+- Improve load times worldwide
+
+Every millisecond of perceived speed **matters**.
+
+## Error handling needs to be user friendly
+
+**Better error messages**:
+
+- Clear explanation of what went wrong
+- No technical jargon
+- Helpful context about why it matters
+
+**Graceful degradation** when things break:
+
+- Show cached data when API fails
+- Allow offline list viewing
+- Queue actions for when connection returns
+
+**Clear recovery paths**:
+
+- "Try again" buttons that actually work
+- Alternative actions when primary fails
+- Contact support options for persistent issues
+
+**Loading states** that don't feel like the app is frozen:
+
+- Skeleton screens for content loading
+- Progress indicators for long operations
+- Optimistic UI updates for instant feedback
+
+## UI refinement to make interactions feel effortless
+
+**Smoother transitions**:
+
+- Fade animations between views
+- Slide transitions for modals
+- Micro-interactions for buttons and links
+
+**Better visual feedback**:
+
+- Hover states that feel responsive
+- Active states that show engagement
+- Success confirmations that feel rewarding
+
+**Clearer information hierarchy**:
+
+- Better use of typography scale
+- Strategic use of color for emphasis
+- Whitespace that guides the eye
+
+**Purposeful animations** that guide attention:
+
+- Draw focus to important actions
+- Show relationships between elements
+- Provide feedback without distraction
+
+But beyond the technical improvements, there's something bigger here. Show-Hub could be a **template** for how we organize and engage with any serialized content:
+
+- **Podcasts** with episode tracking and discussion forums
+- **Book series** with reading progress and chapter notes
+- **Comics** with issue tracking and character wikis
+- **YouTube channels** with video organization and creator communities
+
+The architecture adapts. The features translate. The social layer still matters.
+
+Right now, streaming services **own our viewing data**. They use it to sell us more content, not to help us remember our relationship with what we've already watched. 
+
+Show-Hub **flips that dynamic**:
+
+- Your data **stays yours**
+- Your notes, ratings, organization—**for you**, not an algorithm
+- Your viewing history serves **your memory**, not engagement metrics
+- Your community connections are **genuine**, not algorithmically manufactured
+
+That feels important. Like it's worth building properly.
+
 </ContentSection>
 
-<ContentSection title="Setup">
-# Setting up the project locally — a quick note for developers who want to explore
-1. Clone the repository.  
-2. Run `npm install` in both `client` and `server` directories.  
-3. Add your environment variables (Mongo URI, JWT secret, TVMaze API key if applicable).  
-4. Start the backend server, then run the frontend.  
+<ContentSection title="Try It">
 
-You’ll have a local version running in no time.
+# Try It Yourself With Realistic Expectations And An Open Mind About What's Possible
+
+The **live demo** is available if you want to poke around and see what I've built. Fair warning: it's a prototype, so don't expect perfection. But it's **functional**, and it demonstrates the concept clearly.
+
+You can:
+
+- **Create an account** and set up your profile
+- **Search for shows** using the TVMaze database
+- **Build lists** with custom organization
+- **Write reviews** with rich text formatting
+- **Participate in forums** with threaded discussions
+- **Find other users** and explore their public content
+
+Experience the features firsthand. See where it works well and where it needs improvement.
+
+## For developers
+
+The code is probably useful **reference material**:
+
+- It's not production-ready, but the **architecture is sound**
+- The implementation choices are **defensible**
+- The structure demonstrates **scalable patterns**
+- The component organization shows **React best practices**
+
+You might learn something. I definitely learned a ton building it.
+
+## For TV enthusiasts
+
+If you're just someone who watches a lot of TV and wishes you had a better system for tracking it all... well, this might be **exactly what you've been looking for**. Even in its current state.
+
+Just remember:
+
+- **Prototype phase** – expect some rough edges
+- **Core features work** – you can use it today
+- **Substantial improvements coming** – it'll get better
+- **Foundation is solid** – the vision is clear
+
+That's where Show-Hub is right now. A **proof of concept** that's functional enough to use, promising enough to develop further, and honest enough to admit what still needs work. Check it out. Let me know what you think. And maybe finally **remember what episode you're actually on**.
+
 </ContentSection>
-
-<ContentSection title="Conclusion">
-# License and next steps — where the project goes from here
-Show-Hub is open-source under the MIT License.  
-
-But really, this is just the beginning. The next phase is about improving performance, optimizing queries, and refining how discussions and lists interact.  
-
-Eventually, I want it to feel like the go-to space for anyone who *lives* for TV — where your lists, reviews, and communities all sit in one cozy, well-designed hub.
-</ContentSection>
-
