@@ -5,593 +5,457 @@ tools: "React.js, Express.js, MongoDB"
 status: "Live Prototype"
 ---
 
-<ContentSection title="The Problem">
+<ContentSection title="Project Overview">
 
-# Building a TV Show Organizer That Actually Remembers What You're Watching And What You Thought About It
+# ShowHub is a fullstack TV show organizer that replaces rigid, one-size-fits-all trackers with a genuinely personalised system you design yourself — built solo in four weeks as a 3rd semester project and a real solution to a real problem
 
-You know that moment when someone asks what you're watching and you... *blank*? Or when you swear you started that critically acclaimed series everyone raved about, but you can't remember if you made it past episode three?
+ShowHub is a **TV show tracking and community platform**. It gives users a central place to manage their watching habits — not just a checklist, but a system with custom lists, episode-level progress tracking, written reviews, and per-show discussion forums. Data for every show, episode, and cast member is pulled live from the **TVMaze public API**.
 
-Yeah, that's the thing about streaming culture. We've got **infinite content** at our fingertips, but **zero system** for tracking what matters to us. Mental notes don't cut it. Screenshots of show titles feel desperate. And those generic "watchlist" features on streaming platforms? They're basically digital junk drawers.
+This was my 3rd semester project, and at the same time a solution to a problem I actually had. I was watching shows across different platforms and keeping mental notes about where I was, what I thought about episodes, and what I wanted to watch next. There was no single place that let me track all of that the way I wanted to organise it. Existing tools either locked you into their structure or didn't go deep enough on customisation.
 
-I built Show-Hub because I was tired of losing track of my own viewing life. Not just *what* I watched, but what I **thought** about it. Where I stopped. Why I stopped. Whether that one episode everyone talks about actually lived up to the hype.
+This case study covers how I designed and built ShowHub solo over four weeks — the API research process, the schema design that took almost a full week on its own, the technical decisions, what I shipped, and the things I'd do differently now that I've been on the other side of it.
 
-This is a case study about building something for people who treat TV shows like a real hobby—because honestly, they are.
+*Note: ShowHub is currently in prototype phase. Core functionality is working and has been manually tested across all major modules, but there's no automated test coverage, and further hardening and optimisation is still needed.*
 
 </ContentSection>
 
-<ContentSection title="Core Features">
+<ContentSection title="The Problem">
 
-# What Show-Hub Actually Does And Why Each Feature Matters To Real Users
+# There was no good way to track TV shows in a structure you actually designed yourself — most trackers are rigid, shallow, and built around their categories, not yours
 
-Here's the core idea: Show-Hub is a platform where you can organize every show you're watching, planning to watch, or have already binged into oblivion. But it goes way deeper than simple lists.
+**The core problem:** Most trackers force you into their pre-defined categories — watched, watching, plan to watch — and offer little beyond that. You can't attach detailed notes to entries, track season and episode progress at a granular level, or organise shows across multiple custom lists the way you'd naturally think about them.
 
-It starts with the basics:
+The sub-problems that made this harder to solve:
 
-- **Secure login and signup** with JWT-based authentication so your data stays yours
-- **Comprehensive show search** that lets you find any show and dive into everything about it
-- **Detailed show information** including posters, banners, ratings, episode counts, premiere dates, and full summaries
-- **Season and episode breakdowns** with individual episode information
-- **Cast lists** and external links for additional context
+- **Fragmented data sources** — show data lives across many scattered APIs; finding a reliable, free, and accessible one was a challenge that had to be solved before a single line of UI code could be written
+- **A non-trivial data model** — the list and entry schema has to accommodate default lists, custom lists, per-entry ratings, episode progress, notes, start/finish dates, and visibility settings — all in a schema that stays sane as features get added
+- **A 4-week learning constraint** — the timeline ran simultaneously with learning the entire MERN stack, meaning every architectural decision had direct time consequences
 
-But here's where it gets interesting.
+The person affected was me — and anyone who watches a meaningful amount of TV and wants more than a bare-bones checkbox tracker. The expectation is a tool that's *as flexible as a spreadsheet* but designed specifically for this purpose.
 
-## Lists that actually reflect how you watch TV
+</ContentSection>
 
-Everyone gets **three default lists** right off the bat:
+<ContentSection title="Goals Criteria">
 
-- **Plan to Watch** for shows on your radar
-- **Watching** for what you're currently following
-- **Completed** for finished series
+# The primary goal was simple and specific: let a user sign up, build personal show lists, and control every detail of every entry — ratings, notes, progress, and visibility
+
+**Primary goal:** Enable a user to sign up, log in, and manage their personal show lists — with full control over ratings, notes, episode/season progress, and list visibility.
+
+My definition of done, as it existed before I started:
+
+- ✓ Users can register and authenticate securely
+- ✓ Users can search for any show and view its full details
+- ✓ Users can add shows to lists and track episode/season progress per entry
+- ✓ Lists are editable: ratings, notes, start/finish dates, visibility per list and per entry
+- ✓ Default lists — **Plan to Watch**, **Watching**, **Completed** — are pre-created per user
+- ✓ Custom lists can be created and managed
+- ✓ User profiles are searchable and public lists are viewable by others
+
+Everything beyond the above was treated as a stretch goal — nice-to-have, but not required for the project to be considered done:
+
+- Reviews with a rich text editor, like/dislike interactions, and privacy controls
+- Show-specific forums with threaded replies and rich text support
+- Top-rated episodes display, cast listings, and external show links
+
+All stretch goals were shipped. The primary definition of done was cleared completely.
+
+</ContentSection>
+
+<ContentSection title="Tech Stack">
+
+# The stack was chosen deliberately for learning, not for optimal technical fit — MERN was the target, and this project was the vehicle to actually understand it as a system
+
+## Frontend
+
+- **React.js** — component-based UI across all feature areas
+- **React-Quill** — rich text editor used for reviews and forum posts
+
+## Backend
+
+- **Node.js** — runtime environment
+- **Express.js** — API routing and middleware layer
+
+## Database & Auth
+
+- **MongoDB** — document database; embedded document model used for list entry data
+- **JWT (JSON Web Token)** — stateless authentication across all protected routes
+
+## External Data
+
+- **TVMaze Public API** — source of all show metadata, episode details, cast information, and ratings; requires no API key or authentication
+
+Each layer was a first for me at the time. This wasn't a project where I applied a known stack — it was the project where I *learned* the stack by building something real with it.
+
+</ContentSection>
+
+<ContentSection title="Technical Discovery">
+
+# Before writing any code, the biggest open question was the data source — and the path to TVMaze was a process of elimination that nearly ran out of time
+
+The most significant pre-build research was finding a viable API for show data. Without a reliable data source, the project had no foundation.
+
+## API Evaluation
+
+Three options were considered:
+
+- **IMDb API** — either paid or required an approval process I couldn't complete in time; ruled out immediately
+- **TMDB (The Movie Database)** — free and well-documented, but their onboarding was broken at the time of my application; multiple requests, no approval; time was running out
+- **TVMaze Public API** — required *zero authentication*, no approval process, no API key setup, just open endpoints; turned out to have one of the most comprehensive TV-specific databases available — covering network TV, OTT originals, anime, and local/international shows
+
+TVMaze was the most practical choice given the circumstances, and it ended up being a genuinely good one — not a compromise, just a different path to the same destination.
+
+## Other Research
+
+Beyond the API search, research was limited and intentional. I chose the MERN stack because I wanted to learn it — there was no comparative evaluation between frameworks. The decision was deliberate: this project was explicitly a MERN learning exercise, and going with something familiar would have defeated that purpose.
+
+**React-Quill** was picked for the rich text editor without evaluating alternatives. It was the most commonly referenced React-compatible Quill wrapper at the time, covered all required formatting features, and worked for what I needed.
+
+</ContentSection>
+
+<ContentSection title="Architecture Planning">
+
+# Planning was minimal but intentional — I started with a mental map of core entities and their relationships, and the list schema alone took close to a week to get right
+
+Planning before coding skipped wireframes and component trees entirely. The starting point was a mental model of the core entities and how they related to each other — the key question being: *what are the main objects in this system, and how do they connect?*
+
+The answer drove everything: **User**, **Show** (external, from TVMaze), **List**, **ListEntry**, **Review**, **Forum**, **ForumPost**, **Reply**. The relationships between these — especially between a User, their Lists, and the individual entries within those lists — were where the real architectural complexity lived.
+
+## The List Schema Problem
+
+The **list/entry schema** was the single hardest design problem in the project. It took close to a week of thinking and revision to arrive at a structure that could support:
+
+- Default lists vs. custom lists
+- Per-entry ratings, episode and season progress, notes, start/finish dates
+- Individual entry visibility — independent of the parent list's visibility
+- Integration with external show data from an API I didn't control
+
+The schema had to be flexible enough to accommodate new fields without constant breaking changes, but structured enough to be queryable and maintainable. MongoDB's embedded document model was the right fit here — per-entry metadata made sense as nested documents rather than a fully normalised relational structure.
+
+> **Lesson learned mid-project:** Because the schema kept evolving as I discovered new feature requirements during frontend work, I spent significant time going back to add, remove, and restructure fields. Features that were half-built had to be revised. This was the defining struggle of the build — and the most lasting lesson: *don't start the frontend until the data model is stable.*
+
+Component architecture wasn't formally planned. I built and organised as I went, which led to a messy structure by the end — a problem I now address upfront on every project.
+
+</ContentSection>
+
+<ContentSection title="Ideation Approach">
+
+# The ideation phase was focused almost entirely on the data architecture — the product concept was clear from day one, but how to model the list data took real exploration before it clicked
+
+Given the 4-week timeline and the fact that I was learning MERN while building, there was no formal ideation phase with multiple design directions to compare. The overall product concept was clear from day one — a personalised show tracker — and the energy went into figuring out *how to build it* rather than *what to build*.
+
+## Schema Exploration
+
+The one area where I actively explored options was the **list data architecture**. Several approaches were considered before landing on the final structure:
+
+- **Flat list model** — simple, but couldn't carry per-entry metadata without becoming unwieldy
+- **Fully relational approach** — more normalised, but MongoDB's document model made this awkward and query-heavy
+- **Embedded document model** — entries as nested documents within list documents; allowed rich per-entry data without JOIN-equivalent queries
+
+The deciding factor was which model let me store and query the most per-entry detail without the schema becoming unmanageable. The embedded approach won.
+
+## Feature Prioritisation
+
+On the feature side, I drew a clear line between what was **necessary** (the list management core) and what was **additional** (reviews, forums, cast display). That separation meant I could commit to the foundation first and add social and content features after the core was solid — which is exactly how the build played out.
+
+</ContentSection>
+
+<ContentSection title="Key Technical Decisions">
+
+# Every major technical decision in ShowHub was driven by either a learning goal, a hard time constraint, or a data modelling trade-off — here's what was chosen and why
+
+## Stack Choice
+
+**Chosen:** MERN — MongoDB, Express, React, Node
+
+This was a deliberate learning project. MERN was chosen because I wanted to learn it, not because it was the optimal technical fit for the problem. The constraint was intentional — this was the whole point of the project.
+
+## External Data Source
+
+**Chosen:** TVMaze Public API  
+**Considered:** IMDb API, TMDB
+
+IMDb was inaccessible within the timeline. TMDB's onboarding was broken at the time. TVMaze required no auth, had comprehensive TV data, and was the only option that unblocked the project under the time constraint.
+
+## Authentication
+
+**Chosen:** JWT (JSON Web Token)
+
+Stateless, widely documented for MERN projects, and appropriate for a single-developer prototype. No need for session infrastructure or a third-party auth service at this stage.
+
+## Rich Text Editing
+
+**Chosen:** React-Quill  
+**Alternatives evaluated:** None
+
+Most commonly referenced React/Quill integration at the time. Covered all required formatting features — headings, media embeds, code blocks — without needing to evaluate further.
+
+## List Entry Data Model
+
+**Chosen:** MongoDB documents with embedded entry metadata
+
+Per-entry data — rating, progress, notes, dates, visibility — was complex enough to warrant embedded documents in Mongo rather than a fully relational structure. Suited the document model and avoided unnecessary JOIN-equivalent queries.
+
+Each of these decisions was made under real constraints, not ideal conditions. In most cases the constraint *was* the rationale.
+
+</ContentSection>
+
+<ContentSection title="The Solution">
+
+# ShowHub shipped as a fullstack web app covering auth, show search, personalised list management, rich-text reviews, threaded forums, and user profiles — everything scoped, everything delivered
+
+**TL;DR:** A fullstack web app where users sign up, search for TV shows via the TVMaze API, manage personal show lists with episode-level detail, write rich-text reviews, and discuss episodes in show-specific forums.
+
+## Core Modules Delivered
+
+**Auth System**
+Secure signup/login with JWT-based authentication and protected routes across the app.
+
+**Show Search & Detail**
+Full show search with detailed pages: poster, banner, metadata, episode breakdowns, cast, top-rated episodes, and external reference links — all sourced from TVMaze.
+
+**Lists & Entry Management**
+Three default lists per user — Plan to Watch, Watching, Completed — plus unlimited custom lists. Per entry: rating, episode/season progress, notes, start and finish dates, and independent visibility controls.
+
+**Visibility Controls**
+Lists and individual entries can be set public or private, independently. Fine-grained control over exactly what others can see.
+
+**Reviews**
+Per-show rich-text reviews using React-Quill — headings, blockquotes, code blocks, embedded media. Like/dislike interactions and public/private privacy settings per review.
+
+**Forums**
+Show-specific discussion boards with categories, threaded replies at any depth, and React-Quill formatting. Forums created from a show's detail page carry a non-removable show tag automatically. Users can add custom tags alongside it.
+
+**User Profiles & Search**
+Searchable user profiles. Public lists and public reviews from any user are visible on their profile.
+
+**Responsive UI**
+The interface is fully responsive, built with React across all feature areas.
+
+The solution addresses the core problem by replacing a rigid tracker with something built around the user's own organisation style — you control the lists, the names, the detail level per entry, and what's visible to others.
+
+</ContentSection>
+
+<ContentSection title="Final Output">
+
+# The final shipped product covers seven distinct modules — each one annotated here with the technical or design detail worth calling out
+
+## Auth Pages
+
+Login and signup with form validation and **JWT-protected sessions**. Authenticated state persists across the app. Basic client-side validation is applied to both forms before submission.
+
+## Show Search
+
+Search any TV show and receive results pulled live from the TVMaze API. Because TVMaze requires no authentication, this works immediately — *no API key management on the client side, no token refresh logic, no auth headers*.
+
+## Show Detail Page
+
+Each show has a dedicated detail page surfacing:
+
+- Poster and banner image
+- Ratings, episode count, premiered and end dates, summary
+- Full season and episode breakdowns with per-episode detail
+- Top-rated episodes
+- Full cast listing
+- External reference links
+
+The notable technical detail here is the **integration boundary** — show data from TVMaze is fetched on demand, but user-specific data (list membership, reviews) lives in MongoDB and is joined at the application layer.
+
+## Lists & Entry Management
+
 <figure>
 <img src="https://raw.githubusercontent.com/MAYANK-T0MAR/show-hub/main/case-study/show-hub_lists_shot.png" alt="show hub lists"/>
 <figcaption>Show Hub Lists</figcaption>
 </figure>
+The most complex module in the app. Three default lists are auto-created on user registration. Users can:
 
-But you can also create **custom lists**—because maybe you need a "Comfort Rewatches" list or "Shows That Destroyed Me Emotionally" or whatever organization system makes sense to your brain.
-
-And get this: **you control visibility**. Set entire lists as public or private. Set individual entries as public or private. Because sometimes you want to share your impeccable taste, and sometimes you just want to track that guilty pleasure show without judgment.
+- Create additional custom lists
+- Add any show to any list
+- Edit each entry individually — rating, episode/season progress, freeform notes, start and finish dates
+- Toggle visibility independently at the list level and the entry level
+- Remove shows from any list
 
 <figure>
 <img src="https://raw.githubusercontent.com/MAYANK-T0MAR/show-hub/main/case-study/show-hub_listVisibilitySettings_shot.png" alt="show hub list visibility settings"/>
 <figcaption>Show Hub List Visibility Settings</figcaption>
 </figure>
+Both lists and individual entries carry independent public/private visibility — a private entry inside a public list stays hidden.
 
-For each show in your lists, you can:
-
-- Track your **episode progress** (currently on S2E7)
-- Add **personal ratings** on your own scale
-- Note **start and finish dates**
-- Write **personal notes** about your experience
-- Control **visibility settings** for each entry
-
-It's like a journal for your viewing habits.
-
-## Reviews with actual depth and formatting options
-
+## Reviews
 <figure>
 <img src="https://raw.githubusercontent.com/MAYANK-T0MAR/MAYANK-T0MAR/main/assets/showHub_reviews.png" alt="show hub reviews" />
 <figcaption>Show Hub Reviews</figcaption>
 </figure>
+Per-show reviews written with the **React-Quill rich text editor**. Full formatting support:
 
-Reading reviews is one thing. Writing them is where Show-Hub gets fun. There's a **rich text editor** that lets you format your thoughts properly:
+- Headings, blockquotes, code blocks
+- Embedded images and video links
 
-- **Headings** to organize sections
-- **Quotes** for memorable dialogue
-- **Code blocks** if you're feeling technical
-- **Embedded images** for screenshots and visual evidence
-- **Embedded videos** and YouTube clips to reference specific scenes
+Other users can like or dislike reviews. Like and dislike are mutually exclusive — toggling one removes the other. Reviews can be set private to hide them from public view.
 
-And yeah, reviews can be **public or private** too. Sometimes you want to contribute to the conversation. Sometimes you just need to process what you watched.
-
-Other users can **like or dislike reviews**, which creates this organic curation system where thoughtful takes rise to the top.
-
-## Forums that don't feel like shouting into the void
+## Forums
 
 <figure>
 <img src="https://raw.githubusercontent.com/MAYANK-T0MAR/MAYANK-T0MAR/main/assets/showHub_forums.png" alt="show hub forums" />
 <figcaption>Show Hub Forums</figcaption>
 </figure>
+Show-specific discussion boards organised by category. Forums created from a show's detail page receive a **non-removable show tag** automatically — users cannot delete it. Users can add extra custom tags alongside it. Threaded replies work at any depth. Forum posts use the React-Quill editor with full formatting support: headings, italic, strikethrough, images, videos, and links.
 
-Every show has its **own forum space**. You can:
-
-- Create **discussion threads** under different categories
-- **Reply to posts** and other replies for real threading
-- Use the **same rich text editor** with formatting, links, and media embeds
-- Organize conversations by **topic categories** (episode discussions, theories, general chat)
-
-It's designed to feel like actual conversation, not just scattered comments disappearing into an algorithm.
-
-## Finding your people through user search and profiles
-
-**User search** lets you discover other viewers:
-
-- Check out their **profiles**
-- Browse their **public lists**
-- Read their **reviews**
-- See what they're watching and what they think about it
+## User Profiles
 
 <figure>
 <img src="https://raw.githubusercontent.com/MAYANK-T0MAR/MAYANK-T0MAR/main/assets/showHub_userLists_page.png" alt="User List" />
 <figcaption>Show Hub User List</figcaption>
 </figure>
-
-It's the social layer that most tracking apps completely miss. Because honestly, half the fun of watching great TV is finding someone else who *Gets It*.
-
-</ContentSection>
-
-<ContentSection title="Technical Stack">
-
-# The Technical Foundation And Why These Choices Made Sense For Something That Could Actually Scale
-
-Look, I could've thrown together a basic CRUD app and called it done. But if you're building something meant to handle potentially **thousands of shows**, **hundreds of users**, **nested forum replies**, and **rich media content**... you need architecture that won't collapse under its own weight.
-
-## Frontend built with React for component flexibility
-
-**React.js** handles the frontend because component-based design is perfect for something this modular. Lists, reviews, forums, show details—they're all discrete pieces that need to work independently and together. 
-
-Plus, React's **state management** keeps the UI responsive even when you're juggling multiple data streams simultaneously.
-
-## Backend powered by Node and Express
-
-**Node.js** and **Express.js** power the backend. Lightweight, fast, and honestly just pleasant to work with. 
-
-Express gives you the flexibility to structure API routes however makes sense for your data model, and Node handles **async operations smoothly**—which matters when you're fetching show data, user data, and forum threads all at once.
-
-## MongoDB for flexible data structures
-
-**MongoDB** for the database was the obvious choice here. Shows, users, lists, reviews, forums—they all have **variable data structures**:
-
-- Some shows have ten seasons, some have one
-- Some users have three lists, some have thirty
-- Some reviews are short, some are essays with embedded media
-
-NoSQL flexibility means I'm not fighting against rigid schemas every time the data needs to breathe.
-
-## JWT authentication and React-Quill for rich editing
-
-**JWT authentication** keeps things secure without the overhead of session management. Tokens handle auth state cleanly across the frontend and backend.
-
-**React-Quill** provides that rich text editing experience. I wanted users to be able to format their thoughts properly without learning markdown or HTML. **WYSIWYG** just makes sense for reviews and forum posts.
-
-## The TVMaze API as the comprehensive data source
-
-All the show information—metadata, episode details, cast, ratings, everything—comes from the **TVMaze API**. It's:
-
-- **Comprehensive** with detailed show data
-- **Well-maintained** with regular updates
-- **Free** for non-commercial use
-
-Rather than scraping data or building some massive proprietary database, I could focus on the features that actually differentiate Show-Hub: the organization, the social layer, the personal tracking.
+Searchable user profiles. Public lists and public reviews from any user are visible on their profile page. Private content is always filtered from public views.
 
 </ContentSection>
 
-<ContentSection title="Deep Dive">
+<ContentSection title="Testing Coverage">
 
-# Features That Actually Change How You Interact With TV Shows On A Daily Basis
+# All testing was manual and functional — no automated framework, but every major module was verified against its specified behaviour, including edge cases and permission boundaries
 
-Let me walk you through the stuff that makes Show-Hub feel different from just another list app.
+There's no automated test suite — this was a prototype built under a tight deadline, and writing tests was out of scope. What I did instead was manual functional testing across every major module after the build was complete, verifying that core behaviours worked as specified. **Edge cases like empty states, optional fields, and permission boundaries were specifically targeted.**
 
-## Show details that give you the full picture
+## Lists — Core Behaviour
 
-When you search for a show, you're not getting some bare-bones title and thumbnail. You get **everything**:
+- ✓ Users can add shows to all three default lists: Plan to Watch, Watching, Completed
+- ✓ Moving a show between default lists removes it from the original — no duplicate entries in defaults
+- ✓ A show in a default list can still be added to a custom list — mutual exclusivity applies only between the three defaults
+- ✓ Users can create custom lists and add shows to them
+- ✓ Private lists are hidden from other users; only the owner sees them
+- ✓ Private entries remain hidden even inside a public list — entry-level visibility is enforced independently
+- ✓ Users can remove shows from any list, default or custom
 
-- **High-quality poster and banner images** for visual appeal
-- **Complete metadata** including ratings, total episode count, premiere date, end date (if applicable)
-- **Proper summaries** that actually tell you what you're getting into
-- **Season and episode breakdowns** with descriptions and individual ratings
-- **Top-rated episodes section** so you know which ones are worth prioritizing
-- **Cast information** with actor details
-- **External links** to IMDb, official sites, and other resources
+## Lists — Entry Editing
 
-Then it breaks down by season and episode. You can see every single episode, read descriptions, check ratings for individual episodes. There's even a "Top-Rated Episodes" section so you know which ones are worth prioritizing if you're cherry-picking.
+- ✓ Rating can be edited per entry and intentionally left empty — the field is optional
+- ✓ Episode/season progress can be modified and left empty
+- ✓ Start and finish dates are independently editable and can both be left blank
+- ✓ Visibility can be toggled independently at the entry level and the list level
+- ✓ Shows can be deleted from any list through the entry edit interface
 
-Cast information is right there too. Sometimes you're watching something specifically because of an actor, or you recognize someone and want to confirm where you've seen them before.
+## Reviews
 
-## List management that adapts to how your brain works
+- ✓ Summary enforces a character range: under 20 or over 120 characters are rejected on submission
+- ✓ Review body enforces a 2200-character minimum — submissions under the threshold are blocked
+- ✓ Rich text formatting renders correctly: bold, italic, headings, lists, embedded images, and video links
+- ✓ Private reviews are not visible to other users — only the author sees them
+- ✓ Like and dislike are mutually exclusive — selecting one deselects the other; a user cannot hold both simultaneously
+- ✓ Clicking the same reaction again undoes it — likes and dislikes are togglable, not one-way
 
-Those **three default lists** (Plan to Watch, Watching, Completed) cover the basics. But **custom lists** are where personalization happens:
+## Forums
 
-- "Shows Recommended by Friends" to track suggestions
-- "Animated Series" because that's a whole different vibe
-- "Canceled Too Soon" for the heartbreak collection
-- Whatever organizational system makes sense to *your* brain
+- ✓ Thread nesting works at any depth — replies to replies render the correct hierarchy
+- ✓ Like/dislike on forum posts behaves identically to reviews: mutually exclusive and togglable
+- ✓ Forums created from a show's detail page automatically receive a non-removable show name tag
+- ✓ Rich text formatting works in forum posts: headings, italic, strikethrough, images, videos, links
+- ✓ Users can add custom tags when creating a thread, in addition to the auto-applied show tag
 
-The **granular visibility controls** are crucial. You might want your "Watching" list public to spark conversations, but keep your "Comfort Rewatches" private because who needs judgment for watching *The Office* for the fifth time?
+## Form Validation
 
-And for each entry in your lists, you're tracking:
+- ✓ Login and signup forms validate required fields and surface errors before submission — empty or malformed inputs are caught client-side
+- ✓ Basic validation is applied consistently across other forms: list creation, entry editing, forum creation
 
-- **Episode progress** (currently on S2E7)
-- **Personal ratings** on your own scale
-- **Start and finish dates** to remember your viewing timeline
-- **Personal notes** about your experience
-
-It's the difference between "yeah, I watched that" and actually **remembering your relationship** with a show.
-
-## Reviews that feel like real criticism with proper structure
-
-The review system isn't just star ratings and a comment box. It's a **proper writing environment**.
-
-With React-Quill's rich text editor, you can structure your thoughts like an actual essay or blog post:
-
-- Use **headings** to organize sections
-- **Quote** dialogue or memorable lines
-- Embed **images** for screenshots of cinematography, poster comparisons, whatever visual evidence supports your point
-- Embed **videos or YouTube links** to reference specific scenes or analyses
-- Use **code blocks** if you want to diagram plot structure or break down story beats technically (I see you, screenwriting nerds)
-
-The **like/dislike system** creates a natural quality filter:
-
-- Thoughtful, well-argued reviews get **surfaced**
-- Lazy hot takes **sink**
-- It's democratic but meritocratic
-
-And that **public/private toggle**? Sometimes you want to contribute to the discourse. Sometimes you just need to process your feelings about a devastating finale. Both are valid.
-
-## Forums designed for actual conversation and threading
-
-**Show-specific forums** mean discussions stay focused and discoverable. If you want to talk about *Better Call Saul*'s cinematography or debate *Succession*'s ending, there's a dedicated space for that.
-
-Creating forums under **categories** keeps things organized:
-
-- Episode discussions
-- Fan theories
-- General chat
-- Technical analysis
-- Whatever topic needs its own space
-
-The **reply-to-reply structure** allows real threading. Someone posts a theory, you respond with evidence, someone else adds a counterpoint, another person brings in context from the source material. It unfolds naturally.
-
-Same **rich text editor** works here—format your posts, add emphasis, embed clips or images to make your point. It's built for **depth**, not just quick reactions.
-
-## The social layer nobody else bothered with
-
-**User search** might seem basic, but it's surprisingly rare in tracking apps. Being able to:
-
-- **Find other users** by username
-- **View their profiles** and get a sense of their taste
-- **Browse their public lists** to discover new shows
-- **Read their reviews** to decide if that obscure show is worth your time
-
-That's how **communities form**.
-
-You discover someone with impeccable taste in sci-fi. You see what they're watching. You read their reviews to decide if that obscure show is worth your time. You realize you have overlapping comfort shows and suddenly you've found your people. 
-
-It's the **connective tissue** that transforms Show-Hub from a personal tool into a platform.
+All tests confirmed passing. The absence of automated coverage is acknowledged and is on the v2 improvement list.
 
 </ContentSection>
 
-<ContentSection title="Reality Check">
+<ContentSection title="Challenges Learnings">
 
-# The Honest Reality Check Because This Is Still A Prototype And I'm Not Going To Pretend Otherwise
+# The hardest part wasn't any single feature — it was the list schema, which cost nearly a week and kept breaking everything downstream every time it changed
 
-Okay, real talk. Show-Hub **works**. The features exist, the architecture is solid, users can actually do everything I've described. But it's a **prototype**, and I'm not going to pretend otherwise.
+## The Hardest Problem
 
-Here's what that means in practice.
+**The list and entry schema.** It took close to a week — roughly a quarter of the entire project timeline — to arrive at a data model that could handle all the requirements without falling apart as features were added. The challenge wasn't any single concept; it was the compounding complexity of designing a schema that served multiple overlapping needs simultaneously:
 
-## Testing is minimal and needs comprehensive coverage
+- Default vs. custom lists
+- Per-entry metadata at multiple levels of granularity
+- Visibility controls at both list and entry level
+- Integration with external show data from an API I didn't own or control
 
-I've done the obvious stuff:
+Every time I thought the schema was done, a new frontend requirement would expose a gap — and I'd have to revise it, often causing cascading changes across the API layer and UI that was already built against the old shape.
 
-- ✓ Make sure auth works
-- ✓ Ensure lists save properly
-- ✓ Verify forum posts actually post
+## What Didn't Get Finished
 
-But comprehensive testing across edge cases? **Still needed**:
+The following were scope cuts under time pressure — not skill gaps:
 
-- ✗ Stress testing with hundreds of concurrent users
-- ✗ Accessibility audits for screen readers and keyboard navigation
-- ✗ Security penetration testing
-- ✗ Cross-browser compatibility testing
-- ✗ Mobile device testing across different screen sizes
+- Folder structure refactor — the codebase is functional but disorganised
+- Pagination across list views, search results, and forum threads
+- Expanded social features and full user profile editing
 
-Those are still on the roadmap.
+They're all on the v2 list.
 
-## Performance could be way better with optimization
+## Unexpected Wall
 
-Right now it handles typical usage fine. But I haven't:
+Working with **third-party API data I couldn't modify or cache properly**. Structuring the boundary between TVMaze data and my own MongoDB data — knowing what to store locally vs. what to fetch on demand — took more thought than expected, and the current implementation may not be optimal.
 
-- Optimized **database queries** aggressively
-- Implemented **caching strategies** for frequently accessed data
-- Fine-tuned **bundle sizes** to reduce initial load times
-- Added **lazy loading** for images and components
-- Integrated a **CDN** for media delivery
+## What I Actually Learned
 
-For a prototype, it's responsive enough. For a production app serving thousands of users? It needs work.
+**ShowHub was where I actually learned MERN** — not just the syntax, but the way the layers fit together as a system. How a React component talks to an Express route, how that route queries MongoDB, how auth middleware intercepts that request, how a JWT carries identity through the stack. I understood each piece individually before this project. This is where they clicked together.
 
-## Error handling is functional but not graceful
+The biggest process insight: the **data model is the foundation**, not something you figure out as you go. When the schema is stable, everything flows. When it isn't, you're constantly rebuilding on shifting ground.
 
-If something breaks, it won't crash spectacularly, but the **user experience of errors** could be much more polished:
-
-- Better **error messages** that actually explain what went wrong
-- **Graceful degradation** when things break
-- Clear **recovery paths** so users know what to do next
-- **Loading states** that don't feel like the app is frozen
-
-## The UI is responsive but has room for refinement
-
-The interface works, but there's polish missing:
-
-- **Smoother transitions** between states
-- **Better visual feedback** for user actions
-- **Clearer information hierarchy** in some sections
-- **Purposeful animations** that guide attention without distracting
-
-It works, but it doesn't *shine* yet.
-
-Why am I telling you this? Because I think it's important to be **honest** about where a project actually is. Show-Hub proves the concept. It demonstrates that this approach to TV tracking—combining organization, reviews, forums, and social discovery—actually enhances how people engage with shows.
-
-But **substantial improvements are required** before it's truly production-ready. Stability needs hardening. Performance needs optimization. Features need polish. That's the nature of prototypes. They're **proof of possibility**, not finished products.
+On the UI/UX side — design decisions and data architecture decisions aren't separate. The way you design a list entry view directly determines what fields the schema needs. They have to be designed together, or at minimum with awareness of each other.
 
 </ContentSection>
 
-<ContentSection title="Key Learnings">
+<ContentSection title="Goals Outcomes">
 
-# What I Learned Building Something People Might Actually Use In Their Daily Lives
+# Of the goals set before the project started, all primary criteria were met and every stretch goal shipped — the 10–15% gap is in code quality and completeness, not in features
 
-Building Show-Hub taught me things you don't learn from tutorials or coding challenges.
+Revisiting each goal from the original definition of done:
 
-## Feature creep is real and seductive
+- ✓ Secure signup and login with JWT auth
+- ✓ Show search and full detail pages via TVMaze
+- ✓ Add shows to lists and track episode/season progress per entry
+- ✓ Editable list entries: ratings, notes, dates, visibility
+- ✓ Default and custom list management
+- ✓ User search and public profile/list viewing
+- ✓ Reviews, forums, and all stretch goals shipped
+- ✗ Code quality and organisation — functional but messy; folder structure needs a full refactor
 
-I kept thinking of new capabilities:
-
-- Maybe add **streaming service integration**
-- Maybe build a **recommendation algorithm**
-- Maybe create **watch parties**
-- Maybe add **subtitle search**
-
-Every idea sounded cool. But each one would've delayed actually shipping something usable. Learning to say **"not yet, that's v2.0"** was crucial.
-
-## Architecture decisions compound over time
-
-The choices I made early in development had **ripple effects** throughout the entire project:
-
-- Choosing **MongoDB** early meant flexibility later when data structures needed to evolve
-- Choosing **React** meant component reusability that saved weeks of development
-- Choosing **JWT** meant stateless authentication that scaled easily
-- Choosing the **TVMaze API** meant reliable data without maintenance overhead
-
-Those early technical choices **echo through the entire project**.
-
-## User experience is about removing friction not adding features
-
-The **visibility controls** for lists and entries? That wasn't in the original design. But I realized people would **hesitate to use lists publicly** if they couldn't control what others saw. 
-
-One small feature removed a **major barrier to engagement**. Sometimes the best feature is the one that gets out of the way.
-
-## Rich text editing changes everything for user content
-
-Once people could **format reviews and forum posts properly**, the quality of contributions jumped noticeably:
-
-- Reviews became **structured arguments** instead of rambling paragraphs
-- Forum posts included **visual evidence** to support claims
-- Discussions felt more **professional and thoughtful**
-
-Giving users better tools **elevates the entire platform**.
-
-## The social layer can't be an afterthought
-
-User search, public profiles, visible reviews—that's not **decoration**. That's the **difference** between a personal tool and a community platform. 
-
-People want to:
-
-- **Share** their taste and opinions
-- **Compare** their viewing habits with others
-- **Discover** new shows through trusted recommendations
-- **Connect** with people who share their interests
-
-Building for that from the start matters. Trying to add it later would've meant rebuilding half the architecture.
-
-## Prototypes need honesty not excuses
-
-I could've hidden the fact that:
-
-- Testing is incomplete
-- Performance isn't optimized
-- Some features are rough around the edges
-- The UI needs refinement
-
-But that would be **dishonest**. Acknowledging where a project actually is builds **trust** and sets **realistic expectations**. People respect transparency more than they respect false perfection.
+**Overall fulfillment: roughly 85–90%.** Everything in the definition of done was shipped. What's missing is quality and completeness in areas like pagination, social features, and code organisation — things I knew were unfinished but ran out of time to address. The features exist; the craft around them needs work.
 
 </ContentSection>
 
-<ContentSection title="Future Plans">
+<ContentSection title="Scope Improvements">
 
-# Where This Goes Next And Why It Matters Beyond Just One App
+# The v2 roadmap starts with a full codebase refactor before anything new gets added — then pagination, social features, and deeper personalisation
 
-Show-Hub as it exists now proves something important: people want **more sophisticated tools** for engaging with TV shows. Not just watchlists. Actual organization, actual memory, actual conversation.
+## Planned — v2
 
-The immediate priorities are clear.
+- **Folder structure refactor** — the current codebase isn't organised; this is the first fix before adding anything new
+- **Pagination** across list views, search results, and forum threads
+- **Expanded social features** — follows, activity feeds, social interactions beyond likes on reviews
+- **Full user profile editing** — avatars, bios, display preferences
 
-## Testing needs to be comprehensive and thorough
+## Longer-term
 
-**Unit tests** for critical functionality:
+- More granular personalisation — custom list fields, personal rating scales, watch habit analytics
+- **Notification system** for forum replies and new episodes of tracked shows
+- Performance improvements: caching TVMaze responses, optimising MongoDB queries, reducing unnecessary re-fetches
+- **Automated testing suite** — unit and integration tests; manual functional testing has been completed across all major modules, but there's no test framework or automated coverage yet
 
-- Authentication flows
-- List creation and modification
-- Review submission and editing
-- Forum post creation and replies
-
-**Integration tests** for user flows:
-
-- Complete signup to first review journey
-- Search to list addition workflow
-- Forum creation to discussion participation
-
-**Performance testing** under load:
-
-- Database query performance with thousands of records
-- Concurrent user handling
-- API response times under stress
-
-**Security audits**:
-
-- JWT token handling
-- Input sanitization
-- SQL injection prevention (even with NoSQL)
-- XSS vulnerability checks
-
-**Accessibility compliance**:
-
-- Screen reader compatibility
-- Keyboard navigation
-- Color contrast ratios
-- Focus indicators
-
-The unsexy stuff that makes software **reliable**.
-
-## Performance optimization can't wait much longer
-
-**Database query optimization**:
-
-- Index frequently queried fields
-- Optimize join operations
-- Implement query result caching
-
-**Caching strategies** for frequently accessed data:
-
-- Show metadata that rarely changes
-- User profile information
-- Popular forum threads
-
-**Frontend bundle size reduction**:
-
-- Code splitting by route
-- Tree shaking unused dependencies
-- Minification and compression
-
-**Lazy loading** for images and components:
-
-- Load show posters on demand
-- Defer non-critical JavaScript
-- Progressive image loading
-
-**CDN integration** for media:
-
-- Distribute static assets globally
-- Reduce server load
-- Improve load times worldwide
-
-Every millisecond of perceived speed **matters**.
-
-## Error handling needs to be user friendly
-
-**Better error messages**:
-
-- Clear explanation of what went wrong
-- No technical jargon
-- Helpful context about why it matters
-
-**Graceful degradation** when things break:
-
-- Show cached data when API fails
-- Allow offline list viewing
-- Queue actions for when connection returns
-
-**Clear recovery paths**:
-
-- "Try again" buttons that actually work
-- Alternative actions when primary fails
-- Contact support options for persistent issues
-
-**Loading states** that don't feel like the app is frozen:
-
-- Skeleton screens for content loading
-- Progress indicators for long operations
-- Optimistic UI updates for instant feedback
-
-## UI refinement to make interactions feel effortless
-
-**Smoother transitions**:
-
-- Fade animations between views
-- Slide transitions for modals
-- Micro-interactions for buttons and links
-
-**Better visual feedback**:
-
-- Hover states that feel responsive
-- Active states that show engagement
-- Success confirmations that feel rewarding
-
-**Clearer information hierarchy**:
-
-- Better use of typography scale
-- Strategic use of color for emphasis
-- Whitespace that guides the eye
-
-**Purposeful animations** that guide attention:
-
-- Draw focus to important actions
-- Show relationships between elements
-- Provide feedback without distraction
-
-But beyond the technical improvements, there's something bigger here. Show-Hub could be a **template** for how we organize and engage with any serialized content:
-
-- **Podcasts** with episode tracking and discussion forums
-- **Book series** with reading progress and chapter notes
-- **Comics** with issue tracking and character wikis
-- **YouTube channels** with video organization and creator communities
-
-The architecture adapts. The features translate. The social layer still matters.
-
-Right now, streaming services **own our viewing data**. They use it to sell us more content, not to help us remember our relationship with what we've already watched. 
-
-Show-Hub **flips that dynamic**:
-
-- Your data **stays yours**
-- Your notes, ratings, organization—**for you**, not an algorithm
-- Your viewing history serves **your memory**, not engagement metrics
-- Your community connections are **genuine**, not algorithmically manufactured
-
-That feels important. Like it's worth building properly.
+The refactor comes first. Everything else built on top of a messy codebase just makes the debt worse.
 
 </ContentSection>
 
-<ContentSection title="Try It">
+<ContentSection title="What I'd Do Differently">
 
-# Try It Yourself With Realistic Expectations And An Open Mind About What's Possible
+# Looking back with what I know now, three things would change immediately: schema before Frontend, Clear Requirements, and documentation from day one
 
-The **live demo** is available if you want to poke around and see what I've built. Fair warning: it's a prototype, so don't expect perfection. But it's **functional**, and it demonstrates the concept clearly.
+## Technical Architecture
 
-You can:
+Lock down all entity schemas before writing a single frontend component. The back-and-forth between schema design and frontend implementation was the most expensive mistake in this project. I'd also plan the component and folder structure upfront — not because I had a preference for one system at the time, but because *any intentional structure is better than no structure*, and you pay the debt of the latter for the rest of the project. I now understand the value of feature-based organisation; I'd implement it from day one.
 
-- **Create an account** and set up your profile
-- **Search for shows** using the TVMaze database
-- **Build lists** with custom organization
-- **Write reviews** with rich text formatting
-- **Participate in forums** with threaded discussions
-- **Find other users** and explore their public content
+## Requirements First
+ 
+Keep requirements as **clear and as concrete as possible** before touching the schema or writing any feature code. The recurring pain in this project — schema revisions, half-built features that had to be reworked, API routes that needed changing mid-build — traced back to requirements that were vague or undiscovered at the start. When you don't know exactly what a feature needs to do, you can't design the data model that supports it. *Concrete requirements aren't bureaucracy — they're the thing that stops you from building the same feature twice.*
 
-Experience the features firsthand. See where it works well and where it needs improvement.
+## Planning & Process
 
-## For developers
+I'd document from day one — not for the case study, but for myself during the build. The absence of documentation meant I couldn't clearly articulate what I'd built during the project presentation, and it limited what I could reflect on here. Even brief notes on why a decision was made, or a quick before/after when something changed, would have been enormously useful. Lazy documentation is a tax you pay at the end when it's too late to recover the details.
 
-The code is probably useful **reference material**:
-
-- It's not production-ready, but the **architecture is sound**
-- The implementation choices are **defensible**
-- The structure demonstrates **scalable patterns**
-- The component organization shows **React best practices**
-
-You might learn something. I definitely learned a ton building it.
-
-## For TV enthusiasts
-
-If you're just someone who watches a lot of TV and wishes you had a better system for tracking it all... well, this might be **exactly what you've been looking for**. Even in its current state.
-
-Just remember:
-
-- **Prototype phase** – expect some rough edges
-- **Core features work** – you can use it today
-- **Substantial improvements coming** – it'll get better
-- **Foundation is solid** – the vision is clear
-
-That's where Show-Hub is right now. A **proof of concept** that's functional enough to use, promising enough to develop further, and honest enough to admit what still needs work. Check it out. Let me know what you think. And maybe finally **remember what episode you're actually on**.
+These aren't a list of failures — they're evidence that the project worked. I came in not knowing MERN, system design, or how UI and architecture decisions intersect. I left with a working fullstack app and a specific, hard-won understanding of what I'd do differently. That's the point of building something real.
 
 </ContentSection>
-
-
-
-
-
-
